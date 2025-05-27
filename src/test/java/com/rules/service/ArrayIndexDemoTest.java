@@ -16,11 +16,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 
 import com.rules.service.model.Rule;
-import com.rules.service.repository.RuleRepository;
 import com.rules.service.service.NestedMapPropertyAccessor;
 import com.rules.service.service.PropertyAccessWrapper;
 import com.rules.service.service.PropertyAccessWrapperAccessor;
 import com.rules.service.service.RuleExecutionService;
+import com.rules.service.service.RuleService;
 import com.rules.service.service.SpelContextConfigurationService;
 
 @ExtendWith(MockitoExtension.class)
@@ -28,7 +28,7 @@ import com.rules.service.service.SpelContextConfigurationService;
 public class ArrayIndexDemoTest {
 
         @Mock
-        private RuleRepository ruleRepository;
+        private RuleService ruleService;
 
         @Mock
         private SpelContextConfigurationService spelContextConfigurationService;
@@ -72,7 +72,7 @@ public class ArrayIndexDemoTest {
                                 "orders.size() > 0 AND orders[0].status == \"shipped\" AND orders[0].amount >= 100",
                                 "STRING_CONCAT(\"Order #\", orders[0].id.toString(), \" for $\", orders[0].amount.toString(), \" has been shipped to \", orders[0].customer.name)",
                                 "shipping_notification");
-                when(ruleRepository.findByRuleset("demo_ruleset")).thenReturn(Arrays.asList(rule));
+                when(ruleService.getRulesByRuleset("demo_ruleset")).thenReturn(Arrays.asList(rule));
 
                 // Create sample e-commerce data
                 Map<String, Object> customer = Map.of("name", "John Doe", "email", "john@example.com");
@@ -104,7 +104,7 @@ public class ArrayIndexDemoTest {
                                 "company.employees.size() > 1 AND company.employees[1].department.name == \"Engineering\"",
                                 "STRING_CONCAT(company.employees[1].profile.firstName, \" \", company.employees[1].profile.lastName, \" works in \", company.employees[1].department.name)",
                                 "employee_info");
-                when(ruleRepository.findByRuleset("demo_ruleset")).thenReturn(Arrays.asList(rule));
+                when(ruleService.getRulesByRuleset("demo_ruleset")).thenReturn(Arrays.asList(rule));
 
                 // Create complex nested company data
                 Map<String, Object> profile1 = Map.of("firstName", "Alice", "lastName", "Johnson");
@@ -135,7 +135,7 @@ public class ArrayIndexDemoTest {
                                 "products.size() >= 3 AND products[2].inStock == true AND products[2].price <= 100",
                                 "STRING_CONCAT(\"Special offer: \", products[2].name, \" available for $\", products[2].price.toString())",
                                 "special_offer");
-                when(ruleRepository.findByRuleset("demo_ruleset")).thenReturn(Arrays.asList(rule));
+                when(ruleService.getRulesByRuleset("demo_ruleset")).thenReturn(Arrays.asList(rule));
 
                 // Test with insufficient products - should not trigger
                 Map<String, Object> product1 = Map.of("name", "Laptop", "price", 999.99, "inStock", true);

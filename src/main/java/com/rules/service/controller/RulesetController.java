@@ -2,7 +2,6 @@ package com.rules.service.controller;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +18,8 @@ import com.rules.service.dto.ExecuteRulesetRequest;
 import com.rules.service.dto.ExecuteRulesetResponse;
 import com.rules.service.dto.ExecutionStats;
 import com.rules.service.model.Rule;
-import com.rules.service.repository.RuleRepository;
 import com.rules.service.service.RuleExecutionService;
-import com.rules.service.service.RuleParserService;
+import com.rules.service.service.RuleService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -35,16 +33,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Rulesets", description = "Operations related to rulesets")
 public class RulesetController {
 
-    private final RuleRepository ruleRepository;
+    private final RuleService ruleService;
     private final RuleExecutionService ruleExecutionService;
-    private final RuleParserService ruleParserService;
 
-    public RulesetController(RuleRepository ruleRepository,
-            RuleExecutionService ruleExecutionService,
-            RuleParserService ruleParserService) {
-        this.ruleRepository = ruleRepository;
+    public RulesetController(RuleService ruleService,
+            RuleExecutionService ruleExecutionService) {
+        this.ruleService = ruleService;
         this.ruleExecutionService = ruleExecutionService;
-        this.ruleParserService = ruleParserService;
     }
 
     @Operation(summary = "Create a new ruleset", description = "Creates a new ruleset with the provided rules.", responses = {
@@ -52,15 +47,8 @@ public class RulesetController {
     })
     @PostMapping
     public ResponseEntity<List<Rule>> createRuleset(@RequestBody CreateRulesetRequest request) {
-        List<Rule> rules = request.getRules().stream()
-                .map(r -> {
-                    RuleParserService.RuleParts parts = ruleParserService.parseRule(r.getRule());
-                    return new Rule(parts.getCondition(), parts.getTransformation(), r.getOutputVariable(),
-                            request.getName());
-                })
-                .collect(Collectors.toList());
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(ruleRepository.saveAll(rules));
+        List<Rule> rules = ruleService.createRuleset(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(rules);
     }
 
     @Operation(summary = "Add a rule to a ruleset", description = "Adds a single rule to an existing ruleset or creates a new ruleset if it doesn't exist. The rule should be in the format 'condition THEN transformation'.", responses = {
@@ -72,9 +60,8 @@ public class RulesetController {
             @Parameter(description = "Name of the ruleset") @PathVariable("name") String name,
             @RequestBody AddRuleRequest request) {
         try {
-            RuleParserService.RuleParts parts = ruleParserService.parseRule(request.getRule());
-            Rule rule = new Rule(parts.getCondition(), parts.getTransformation(), request.getOutputVariable(), name);
-            return ResponseEntity.ok(ruleRepository.save(rule));
+            Rule rule = ruleService.addRule(name, request);
+            return ResponseEntity.ok(rule);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
         }
@@ -83,10 +70,7 @@ public class RulesetController {
     @Operation(summary = "Get all rulesets", description = "Retrieves a list of all rulesets.")
     @GetMapping
     public ResponseEntity<List<String>> getAllRulesets() {
-        List<String> rulesets = ruleRepository.findAll().stream()
-                .map(Rule::getRuleset)
-                .distinct()
-                .collect(Collectors.toList());
+        List<String> rulesets = ruleService.getAllRulesetNames();
         return ResponseEntity.ok(rulesets);
     }
 
@@ -94,7 +78,7 @@ public class RulesetController {
     @GetMapping("/{name}")
     public ResponseEntity<List<Rule>> getRuleset(
             @Parameter(description = "Name of the ruleset") @PathVariable("name") String name) {
-        List<Rule> rules = ruleRepository.findByRuleset(name);
+        List<Rule> rules = ruleService.getRulesByRuleset(name);
         if (rules.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
@@ -108,10 +92,10 @@ public class RulesetController {
 
         Map<String, Object> outputVariables = ruleExecutionService.executeRuleset(request.getRulesetName(),
                 request.getInputData());
-        List<Rule> rules = ruleRepository.findByRuleset(request.getRulesetName());
+        int ruleCount = ruleService.getRuleCountForRuleset(request.getRulesetName());
 
         ExecutionStats stats = new ExecutionStats(
-                rules.size(),
+                ruleCount,
                 outputVariables.size());
 
         return ResponseEntity.ok(new ExecuteRulesetResponse(outputVariables, stats));

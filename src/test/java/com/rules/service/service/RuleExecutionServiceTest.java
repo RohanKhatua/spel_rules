@@ -20,14 +20,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 
 import com.rules.service.model.Rule;
-import com.rules.service.repository.RuleRepository;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("RuleExecutionService Unit Tests")
 class RuleExecutionServiceTest {
 
     @Mock
-    private RuleRepository ruleRepository;
+    private RuleService ruleService;
 
     @Mock
     private SpelContextConfigurationService spelContextConfigurationService;
@@ -87,7 +86,7 @@ class RuleExecutionServiceTest {
         void testStringUppercaseWithDirectAccess() {
             // Arrange
             Rule rule = createRule("age >= 18", "STRING_UPPERCASE(name)", "name_upper");
-            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+            when(ruleService.getRulesByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
 
             Map<String, Object> inputData = new HashMap<>();
             inputData.put("name", "alice");
@@ -105,7 +104,7 @@ class RuleExecutionServiceTest {
         void testStringLowercase() {
             // Arrange
             Rule rule = createRule("age >= 18", "STRING_LOWERCASE(name)", "name_lower");
-            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+            when(ruleService.getRulesByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
 
             Map<String, Object> inputData = Map.of("name", "JOHN", "age", 30);
 
@@ -121,7 +120,7 @@ class RuleExecutionServiceTest {
         void testStringConcat() {
             // Arrange
             Rule rule = createRule("age >= 18", "STRING_CONCAT(\"Hello, \", name)", "greeting");
-            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+            when(ruleService.getRulesByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
 
             Map<String, Object> inputData = Map.of("name", "world", "age", 25);
 
@@ -137,7 +136,7 @@ class RuleExecutionServiceTest {
         void testStringSubstring() {
             // Arrange
             Rule rule = createRule("name.length() > 5", "STRING_SUBSTRING(name, 0, 3)", "name_short");
-            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+            when(ruleService.getRulesByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
 
             Map<String, Object> inputData = Map.of("name", "Alexander", "age", 25);
 
@@ -158,7 +157,7 @@ class RuleExecutionServiceTest {
         void testNestedUppercaseConcat() {
             // Arrange
             Rule rule = createRule("age >= 18", "STRING_UPPERCASE(STRING_CONCAT(\"Mr. \", name))", "formal_name");
-            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+            when(ruleService.getRulesByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
 
             Map<String, Object> inputData = Map.of("name", "smith", "age", 30);
 
@@ -175,7 +174,7 @@ class RuleExecutionServiceTest {
             // Arrange
             String transformation = "STRING_CONCAT(STRING_UPPERCASE(STRING_SUBSTRING(name, 0, 1)), STRING_LOWERCASE(STRING_SUBSTRING(name, 1, name.length())))";
             Rule rule = createRule("name.length() > 3", transformation, "proper_case");
-            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+            when(ruleService.getRulesByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
 
             Map<String, Object> inputData = Map.of("name", "jOHN", "age", 25);
 
@@ -192,7 +191,7 @@ class RuleExecutionServiceTest {
             // Arrange
             Rule rule = createRule("age >= 21", "STRING_UPPERCASE(STRING_CONCAT(\"DR. \", STRING_LOWERCASE(name)))",
                     "doctor_title");
-            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+            when(ruleService.getRulesByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
 
             Map<String, Object> inputData = Map.of("name", "WATSON", "age", 35);
 
@@ -209,7 +208,7 @@ class RuleExecutionServiceTest {
             // Arrange
             String transformation = "STRING_UPPERCASE(STRING_CONCAT(STRING_CONCAT(\"Prof. \", STRING_LOWERCASE(name)), STRING_CONCAT(\" - \", age.toString())))";
             Rule rule = createRule("age >= 30", transformation, "professor_title");
-            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+            when(ruleService.getRulesByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
 
             Map<String, Object> inputData = Map.of("name", "EINSTEIN", "age", 45);
 
@@ -231,7 +230,7 @@ class RuleExecutionServiceTest {
             // Arrange
             Rule rule = createRule("age >= 18 AND name.length() > 3 AND age < 65",
                     "STRING_CONCAT(name, \" - Valid Adult\")", "status");
-            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+            when(ruleService.getRulesByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
 
             // Test valid case
             Map<String, Object> inputData = Map.of("name", "Alice", "age", 25);
@@ -254,7 +253,7 @@ class RuleExecutionServiceTest {
         void testOrConditions() {
             // Arrange
             Rule rule = createRule("age >= 65 OR age <= 12", "STRING_CONCAT(name, \" - Special Rate\")", "rate");
-            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+            when(ruleService.getRulesByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
 
             // Test senior citizen
             Map<String, Object> inputData = Map.of("name", "George", "age", 70);
@@ -282,7 +281,7 @@ class RuleExecutionServiceTest {
         void testNativeStringMethods() {
             // Arrange
             Rule rule = createRule("name.length() > 5", "name.toUpperCase()", "name_upper");
-            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+            when(ruleService.getRulesByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
 
             Map<String, Object> inputData = Map.of("name", "alexander", "age", 25);
 
@@ -299,7 +298,7 @@ class RuleExecutionServiceTest {
             // Arrange
             String transformation = "STRING_CONCAT(name.substring(0, 1).toUpperCase(), name.substring(1).toLowerCase())";
             Rule rule = createRule("name.length() > 3", transformation, "title_case");
-            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+            when(ruleService.getRulesByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
 
             Map<String, Object> inputData = Map.of("name", "mARY", "age", 28);
 
@@ -323,7 +322,7 @@ class RuleExecutionServiceTest {
             Rule rule2 = createRule("age >= 18", "STRING_UPPERCASE(name)", "name_upper");
             Rule rule3 = createRule("age >= 21", "STRING_CONCAT(name, \" can drink\")", "drink_status");
 
-            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule1, rule2, rule3));
+            when(ruleService.getRulesByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule1, rule2, rule3));
 
             Map<String, Object> inputData = Map.of("name", "john", "age", 25);
 
@@ -344,7 +343,7 @@ class RuleExecutionServiceTest {
             Rule rule1 = createRule("age >= 18", "STRING_UPPERCASE(name)", "name_upper");
             Rule rule2 = createRule("age >= 21", "STRING_CONCAT(\"Mr. \", name_upper)", "formal_greeting");
 
-            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule1, rule2));
+            when(ruleService.getRulesByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule1, rule2));
 
             Map<String, Object> inputData = Map.of("name", "smith", "age", 25);
 
@@ -364,7 +363,7 @@ class RuleExecutionServiceTest {
             Rule rule2 = createRule("age >= 21", "STRING_CONCAT(\"Direct: \", name_upper)", "direct_access");
             Rule rule3 = createRule("age >= 21", "STRING_CONCAT(\"Variable: \", #name_upper)", "variable_access");
 
-            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule1, rule2, rule3));
+            when(ruleService.getRulesByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule1, rule2, rule3));
 
             Map<String, Object> inputData = Map.of("name", "alice", "age", 25);
 
@@ -386,7 +385,7 @@ class RuleExecutionServiceTest {
             Rule rule3 = createRule("name_upper != null",
                     "STRING_CONCAT(name_upper, \" will be \", future_age.toString(), \" in 10 years\")", "prediction");
 
-            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule1, rule2, rule3));
+            when(ruleService.getRulesByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule1, rule2, rule3));
 
             Map<String, Object> inputData = Map.of("name", "bob", "age", 30);
 
@@ -410,7 +409,7 @@ class RuleExecutionServiceTest {
         void testNullHandling() {
             // Arrange
             Rule rule = createRule("age >= 18", "STRING_UPPERCASE(name)", "name_upper");
-            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+            when(ruleService.getRulesByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
 
             Map<String, Object> inputData = new HashMap<>();
             inputData.put("name", null);
@@ -428,7 +427,7 @@ class RuleExecutionServiceTest {
         void testEmptyStringHandling() {
             // Arrange
             Rule rule = createRule("age >= 18", "STRING_CONCAT(\"Hello, \", name)", "greeting");
-            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+            when(ruleService.getRulesByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
 
             Map<String, Object> inputData = Map.of("name", "", "age", 25);
 
@@ -444,7 +443,7 @@ class RuleExecutionServiceTest {
         void testFalseConditions() {
             // Arrange
             Rule rule = createRule("age >= 21", "STRING_UPPERCASE(name)", "name_upper");
-            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+            when(ruleService.getRulesByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
 
             Map<String, Object> inputData = Map.of("name", "john", "age", 18);
 
@@ -459,7 +458,7 @@ class RuleExecutionServiceTest {
         @DisplayName("Non-existent ruleset throws exception")
         void testNonExistentRuleset() {
             // Arrange
-            when(ruleRepository.findByRuleset("non_existent")).thenReturn(Arrays.asList());
+            when(ruleService.getRulesByRuleset("non_existent")).thenReturn(Arrays.asList());
 
             Map<String, Object> inputData = Map.of("name", "john", "age", 25);
 
@@ -474,7 +473,7 @@ class RuleExecutionServiceTest {
         void testSubstringOutOfBounds() {
             // Arrange
             Rule rule = createRule("true", "STRING_SUBSTRING(name, 0, 100)", "name_sub");
-            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+            when(ruleService.getRulesByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
 
             Map<String, Object> inputData = Map.of("name", "short", "age", 25);
 
@@ -495,7 +494,7 @@ class RuleExecutionServiceTest {
         void testBooleanValues() {
             // Arrange
             Rule rule = createRule("isActive == true AND age >= 18", "STRING_CONCAT(name, \" - Active\")", "status");
-            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+            when(ruleService.getRulesByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
 
             Map<String, Object> inputData = Map.of("name", "Bob", "age", 30, "isActive", true);
 
@@ -512,7 +511,7 @@ class RuleExecutionServiceTest {
             // Arrange
             Rule rule = createRule("age >= 18", "STRING_CONCAT(name, \" is \", age.toString(), \" years old\")",
                     "description");
-            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+            when(ruleService.getRulesByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
 
             Map<String, Object> inputData = Map.of("name", "Alice", "age", 25);
 
@@ -533,7 +532,7 @@ class RuleExecutionServiceTest {
         void testBasicNestedObjectAccess() {
             // Arrange
             Rule rule = createRule("user.age >= 18", "STRING_UPPERCASE(user.name)", "user_name_upper");
-            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+            when(ruleService.getRulesByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
 
             Map<String, Object> userData = Map.of(
                     "name", "alice",
@@ -553,7 +552,7 @@ class RuleExecutionServiceTest {
             // Arrange
             Rule rule = createRule("user.profile.age >= 21",
                     "STRING_CONCAT(user.profile.firstName, \" \", user.profile.lastName)", "full_name");
-            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+            when(ruleService.getRulesByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
 
             Map<String, Object> profile = Map.of(
                     "firstName", "John",
@@ -575,7 +574,7 @@ class RuleExecutionServiceTest {
             // Arrange
             Rule rule = createRule("user.age >= 18 AND address.country == \"USA\"",
                     "STRING_CONCAT(user.name, \" from \", address.city)", "user_location");
-            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+            when(ruleService.getRulesByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
 
             Map<String, Object> user = Map.of("name", "Bob", "age", 25);
             Map<String, Object> address = Map.of("city", "New York", "country", "USA");
@@ -594,7 +593,7 @@ class RuleExecutionServiceTest {
             // Arrange
             Rule rule = createRule("user.profile.age >= 18", "STRING_UPPERCASE(user.profile.name)",
                     "profile_name_upper");
-            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+            when(ruleService.getRulesByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
 
             Map<String, Object> user = Map.of("name", "alice"); // No profile object
             Map<String, Object> inputData = Map.of("user", user);
@@ -613,7 +612,7 @@ class RuleExecutionServiceTest {
             Rule rule = createRule("company.employees.size() > 0 AND company.active == true",
                     "STRING_CONCAT(company.name, \" has \", company.employees.size().toString(), \" employees\")",
                     "company_info");
-            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+            when(ruleService.getRulesByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
 
             Map<String, Object> company = Map.of(
                     "name", "TechCorp",
@@ -635,7 +634,7 @@ class RuleExecutionServiceTest {
             Rule rule1 = createRule("user.age >= 18", "user.profile", "user_profile");
             Rule rule2 = createRule("user_profile != null", "STRING_UPPERCASE(user_profile.name)",
                     "profile_name_upper");
-            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule1, rule2));
+            when(ruleService.getRulesByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule1, rule2));
 
             Map<String, Object> profile = Map.of("name", "alice", "title", "engineer");
             Map<String, Object> user = Map.of("age", 25, "profile", profile);
@@ -655,7 +654,7 @@ class RuleExecutionServiceTest {
             // Arrange
             Rule rule = createRule("age >= 18 AND user.profile.verified == true",
                     "STRING_CONCAT(name, \" - \", user.profile.title)", "verified_user");
-            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+            when(ruleService.getRulesByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
 
             Map<String, Object> profile = Map.of("title", "Senior Developer", "verified", true);
             Map<String, Object> user = Map.of("profile", profile);
@@ -681,7 +680,7 @@ class RuleExecutionServiceTest {
         void testBasicArrayIndexAccess() {
             // Arrange
             Rule rule = createRule("users[0].age >= 18", "STRING_UPPERCASE(users[0].name)", "first_user_name_upper");
-            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+            when(ruleService.getRulesByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
 
             Map<String, Object> user1 = Map.of("name", "alice", "age", 25);
             Map<String, Object> user2 = Map.of("name", "bob", "age", 30);
@@ -701,7 +700,7 @@ class RuleExecutionServiceTest {
             Rule rule = createRule("company.employees[1].profile.active == true",
                     "STRING_CONCAT(company.employees[1].profile.firstName, \" \", company.employees[1].profile.lastName)",
                     "second_employee_name");
-            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+            when(ruleService.getRulesByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
 
             Map<String, Object> profile1 = Map.of("firstName", "Alice", "lastName", "Smith", "active", false);
             Map<String, Object> profile2 = Map.of("firstName", "Bob", "lastName", "Johnson", "active", true);
@@ -724,7 +723,7 @@ class RuleExecutionServiceTest {
             Rule rule = createRule("orders[0].amount >= 100 AND orders[0].status == \"completed\"",
                     "STRING_CONCAT(\"Order #\", orders[0].id.toString(), \" - $\", orders[0].amount.toString())",
                     "order_summary");
-            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+            when(ruleService.getRulesByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
 
             Map<String, Object> order1 = Map.of("id", 123, "amount", 150.50, "status", "completed");
             Map<String, Object> order2 = Map.of("id", 124, "amount", 75.25, "status", "pending");
@@ -743,7 +742,7 @@ class RuleExecutionServiceTest {
             // Arrange
             Rule rule = createRule("users.size() > 0 AND users[0].age >= 18", "STRING_UPPERCASE(users[0].name)",
                     "first_user_name");
-            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+            when(ruleService.getRulesByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
 
             // Test with empty array - condition should be false
             Map<String, Object> inputData1 = Map.of("users", Arrays.asList());
@@ -764,7 +763,7 @@ class RuleExecutionServiceTest {
             Rule rule = createRule("users[0].age >= 18 AND users[1].age >= 21",
                     "STRING_CONCAT(users[0].name, \" and \", users[1].name, \" are both adults\")",
                     "adult_users");
-            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+            when(ruleService.getRulesByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
 
             Map<String, Object> user1 = Map.of("name", "Alice", "age", 20);
             Map<String, Object> user2 = Map.of("name", "Bob", "age", 25);
@@ -785,7 +784,7 @@ class RuleExecutionServiceTest {
             Rule rule = createRule("company.employees[0].active == true AND company.name != null",
                     "STRING_CONCAT(company.name, \" - Employee: \", company.employees[0].profile.fullName)",
                     "company_employee_info");
-            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+            when(ruleService.getRulesByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
 
             Map<String, Object> profile = Map.of("fullName", "Alice Johnson");
             Map<String, Object> employee = Map.of("active", true, "profile", profile);
@@ -806,7 +805,7 @@ class RuleExecutionServiceTest {
             Rule rule = createRule("products[2].inStock == true",
                     "STRING_CONCAT(\"Available: \", products[2].name, \" - $\", products[2].price.toString())",
                     "third_product_info");
-            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+            when(ruleService.getRulesByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
 
             Map<String, Object> product1 = Map.of("name", "Laptop", "price", 999.99, "inStock", false);
             Map<String, Object> product2 = Map.of("name", "Mouse", "price", 29.99, "inStock", true);
@@ -826,7 +825,7 @@ class RuleExecutionServiceTest {
             // Arrange - use size() method to ensure safe array access
             Rule rule = createRule("users.size() > 2 AND users[2].age >= 18",
                     "STRING_CONCAT(\"Third user: \", users[2].name)", "third_user");
-            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+            when(ruleService.getRulesByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
 
             // Test with insufficient elements - condition should be false
             Map<String, Object> user1 = Map.of("name", "alice", "age", 25);

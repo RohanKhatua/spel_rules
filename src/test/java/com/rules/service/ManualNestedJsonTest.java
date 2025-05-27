@@ -16,11 +16,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 
 import com.rules.service.model.Rule;
-import com.rules.service.repository.RuleRepository;
 import com.rules.service.service.NestedMapPropertyAccessor;
 import com.rules.service.service.PropertyAccessWrapper;
 import com.rules.service.service.PropertyAccessWrapperAccessor;
 import com.rules.service.service.RuleExecutionService;
+import com.rules.service.service.RuleService;
 import com.rules.service.service.SpelContextConfigurationService;
 
 @ExtendWith(MockitoExtension.class)
@@ -28,7 +28,7 @@ import com.rules.service.service.SpelContextConfigurationService;
 public class ManualNestedJsonTest {
 
     @Mock
-    private RuleRepository ruleRepository;
+    private RuleService ruleService;
 
     @Mock
     private SpelContextConfigurationService spelContextConfigurationService;
@@ -70,7 +70,7 @@ public class ManualNestedJsonTest {
         // Arrange
         Rule rule = createRule("user.profile.age >= 25",
                 "STRING_CONCAT(\"Hello \", user.profile.name)", "greeting");
-        when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+        when(ruleService.getRulesByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
 
         // Create nested JSON structure
         Map<String, Object> profile = Map.of(

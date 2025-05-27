@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.rules.service.model.Rule;
-import com.rules.service.repository.RuleRepository;
 
 /**
  * Service responsible for executing rule sets against input data
@@ -26,12 +25,12 @@ public class RuleExecutionService {
 
     private static final Logger logger = LoggerFactory.getLogger(RuleExecutionService.class);
 
-    private final RuleRepository ruleRepository;
+    private final RuleService ruleService;
     private final ExpressionParser parser;
     private final SpelContextConfigurationService spelContextService;
 
-    public RuleExecutionService(RuleRepository ruleRepository, SpelContextConfigurationService spelContextService) {
-        this.ruleRepository = ruleRepository;
+    public RuleExecutionService(RuleService ruleService, SpelContextConfigurationService spelContextService) {
+        this.ruleService = ruleService;
         this.parser = new SpelExpressionParser();
         this.spelContextService = spelContextService;
     }
@@ -76,7 +75,7 @@ public class RuleExecutionService {
      * Get rules for a specific ruleset
      */
     private List<Rule> getRulesForRuleset(String rulesetName) {
-        List<Rule> rules = ruleRepository.findByRuleset(rulesetName);
+        List<Rule> rules = ruleService.getRulesByRuleset(rulesetName);
         if (rules.isEmpty()) {
             throw new IllegalArgumentException("Ruleset not found: " + rulesetName);
         }
