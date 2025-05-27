@@ -387,6 +387,565 @@ public class RuleExecutionServiceIntegrationTest {
         }
     }
 
+    @Nested
+    @DisplayName("Nested JSON Object Integration Tests")
+    class NestedJsonObjectIntegrationTests {
+
+        @Test
+        @DisplayName("Basic nested object access through REST API")
+        void testBasicNestedObjectAccess() throws Exception {
+            // Create ruleset with nested object access
+            String rulesetPayload = """
+                    {
+                        "name": "nested_basic_test",
+                        "rules": [
+                            {
+                                "rule": "user.age >= 18 THEN STRING_UPPERCASE(user.name)",
+                                "outputVariable": "user_name_upper"
+                            }
+                        ]
+                    }
+                    """;
+
+            mockMvc.perform(post("/api/rulesets")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(rulesetPayload))
+                    .andExpect(status().isCreated());
+
+            // Execute with nested JSON input
+            String executePayload = """
+                    {
+                        "rulesetName": "nested_basic_test",
+                        "inputData": {
+                            "user": {
+                                "name": "alice",
+                                "age": 25
+                            }
+                        }
+                    }
+                    """;
+
+            MvcResult result = mockMvc.perform(post("/api/rulesets/execute")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(executePayload))
+                    .andExpect(status().isOk())
+                    .andReturn();
+
+            String responseBody = result.getResponse().getContentAsString();
+            TypeReference<Map<String, Object>> typeRef = new TypeReference<Map<String, Object>>() {
+            };
+            Map<String, Object> response = objectMapper.readValue(responseBody, typeRef);
+            @SuppressWarnings("unchecked")
+            Map<String, Object> outputVariables = (Map<String, Object>) response.get("outputVariables");
+
+            assertThat(outputVariables.get("user_name_upper")).isEqualTo("ALICE");
+        }
+
+        @Test
+        @DisplayName("Deep nested object access through REST API")
+        void testDeepNestedObjectAccess() throws Exception {
+            // Create ruleset with deep nested access
+            String rulesetPayload = """
+                    {
+                        "name": "nested_deep_test",
+                        "rules": [
+                            {
+                                "rule": "user.profile.age >= 21 THEN STRING_CONCAT(user.profile.firstName, \\\" \\\", user.profile.lastName)",
+                                "outputVariable": "full_name"
+                            }
+                        ]
+                    }
+                    """;
+
+            mockMvc.perform(post("/api/rulesets")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(rulesetPayload))
+                    .andExpect(status().isCreated());
+
+            // Execute with deeply nested JSON input
+            String executePayload = """
+                    {
+                        "rulesetName": "nested_deep_test",
+                        "inputData": {
+                            "user": {
+                                "profile": {
+                                    "firstName": "John",
+                                    "lastName": "Doe",
+                                    "age": 30
+                                }
+                            }
+                        }
+                    }
+                    """;
+
+            MvcResult result = mockMvc.perform(post("/api/rulesets/execute")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(executePayload))
+                    .andExpect(status().isOk())
+                    .andReturn();
+
+            String responseBody = result.getResponse().getContentAsString();
+            TypeReference<Map<String, Object>> typeRef = new TypeReference<Map<String, Object>>() {
+            };
+            Map<String, Object> response = objectMapper.readValue(responseBody, typeRef);
+            @SuppressWarnings("unchecked")
+            Map<String, Object> outputVariables = (Map<String, Object>) response.get("outputVariables");
+
+            assertThat(outputVariables.get("full_name")).isEqualTo("John Doe");
+        }
+
+        @Test
+        @DisplayName("Multiple nested objects in same rule through REST API")
+        void testMultipleNestedObjects() throws Exception {
+            // Create ruleset with multiple nested objects
+            String rulesetPayload = """
+                    {
+                        "name": "nested_multiple_test",
+                        "rules": [
+                            {
+                                "rule": "user.age >= 18 AND address.country == \\\"USA\\\" THEN STRING_CONCAT(user.name, \\\" from \\\", address.city)",
+                                "outputVariable": "user_location"
+                            }
+                        ]
+                    }
+                    """;
+
+            mockMvc.perform(post("/api/rulesets")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(rulesetPayload))
+                    .andExpect(status().isCreated());
+
+            // Execute with multiple nested objects
+            String executePayload = """
+                    {
+                        "rulesetName": "nested_multiple_test",
+                        "inputData": {
+                            "user": {
+                                "name": "Bob",
+                                "age": 25
+                            },
+                            "address": {
+                                "city": "New York",
+                                "country": "USA"
+                            }
+                        }
+                    }
+                    """;
+
+            MvcResult result = mockMvc.perform(post("/api/rulesets/execute")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(executePayload))
+                    .andExpect(status().isOk())
+                    .andReturn();
+
+            String responseBody = result.getResponse().getContentAsString();
+            TypeReference<Map<String, Object>> typeRef = new TypeReference<Map<String, Object>>() {
+            };
+            Map<String, Object> response = objectMapper.readValue(responseBody, typeRef);
+            @SuppressWarnings("unchecked")
+            Map<String, Object> outputVariables = (Map<String, Object>) response.get("outputVariables");
+
+            assertThat(outputVariables.get("user_location")).isEqualTo("Bob from New York");
+        }
+
+        @Test
+        @DisplayName("Complex nested structure with arrays through REST API")
+        void testComplexNestedStructure() throws Exception {
+            // Create ruleset with complex nested structure
+            String rulesetPayload = """
+                    {
+                        "name": "nested_complex_test",
+                        "rules": [
+                            {
+                                "rule": "company.employees.size() > 0 AND company.active == true THEN STRING_CONCAT(company.name, \\\" has \\\", company.employees.size().toString(), \\\" employees\\\")",
+                                "outputVariable": "company_info"
+                            }
+                        ]
+                    }
+                    """;
+
+            mockMvc.perform(post("/api/rulesets")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(rulesetPayload))
+                    .andExpect(status().isCreated());
+
+            // Execute with complex nested structure
+            String executePayload = """
+                    {
+                        "rulesetName": "nested_complex_test",
+                        "inputData": {
+                            "company": {
+                                "name": "TechCorp",
+                                "active": true,
+                                "employees": ["Alice", "Bob", "Charlie"]
+                            }
+                        }
+                    }
+                    """;
+
+            MvcResult result = mockMvc.perform(post("/api/rulesets/execute")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(executePayload))
+                    .andExpect(status().isOk())
+                    .andReturn();
+
+            String responseBody = result.getResponse().getContentAsString();
+            TypeReference<Map<String, Object>> typeRef = new TypeReference<Map<String, Object>>() {
+            };
+            Map<String, Object> response = objectMapper.readValue(responseBody, typeRef);
+            @SuppressWarnings("unchecked")
+            Map<String, Object> outputVariables = (Map<String, Object>) response.get("outputVariables");
+
+            assertThat(outputVariables.get("company_info")).isEqualTo("TechCorp has 3 employees");
+        }
+
+        @Test
+        @DisplayName("Mixed flat and nested property access through REST API")
+        void testMixedFlatAndNestedAccess() throws Exception {
+            // Create ruleset with mixed access patterns
+            String rulesetPayload = """
+                    {
+                        "name": "nested_mixed_test",
+                        "rules": [
+                            {
+                                "rule": "age >= 18 AND user.profile.verified == true THEN STRING_CONCAT(name, \\\" - \\\", user.profile.title)",
+                                "outputVariable": "verified_user"
+                            }
+                        ]
+                    }
+                    """;
+
+            mockMvc.perform(post("/api/rulesets")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(rulesetPayload))
+                    .andExpect(status().isCreated());
+
+            // Execute with mixed flat and nested data
+            String executePayload = """
+                    {
+                        "rulesetName": "nested_mixed_test",
+                        "inputData": {
+                            "name": "Alice",
+                            "age": 30,
+                            "user": {
+                                "profile": {
+                                    "title": "Senior Developer",
+                                    "verified": true
+                                }
+                            }
+                        }
+                    }
+                    """;
+
+            MvcResult result = mockMvc.perform(post("/api/rulesets/execute")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(executePayload))
+                    .andExpect(status().isOk())
+                    .andReturn();
+
+            String responseBody = result.getResponse().getContentAsString();
+            TypeReference<Map<String, Object>> typeRef = new TypeReference<Map<String, Object>>() {
+            };
+            Map<String, Object> response = objectMapper.readValue(responseBody, typeRef);
+            @SuppressWarnings("unchecked")
+            Map<String, Object> outputVariables = (Map<String, Object>) response.get("outputVariables");
+
+            assertThat(outputVariables.get("verified_user")).isEqualTo("Alice - Senior Developer");
+        }
+    }
+
+    @Nested
+    @DisplayName("Array Index Access Integration Tests")
+    class ArrayIndexAccessIntegrationTests {
+
+        @Test
+        @DisplayName("Basic array index access through REST API")
+        void testBasicArrayIndexAccess() throws Exception {
+            // Create ruleset with array index access
+            String rulesetPayload = """
+                    {
+                        "name": "array_basic_test",
+                        "rules": [
+                            {
+                                "rule": "users[0].age >= 18 THEN STRING_UPPERCASE(users[0].name)",
+                                "outputVariable": "first_user_name_upper"
+                            }
+                        ]
+                    }
+                    """;
+
+            mockMvc.perform(post("/api/rulesets")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(rulesetPayload))
+                    .andExpect(status().isCreated());
+
+            // Execute with array input
+            String executePayload = """
+                    {
+                        "rulesetName": "array_basic_test",
+                        "inputData": {
+                            "users": [
+                                {
+                                    "name": "alice",
+                                    "age": 25
+                                },
+                                {
+                                    "name": "bob",
+                                    "age": 30
+                                }
+                            ]
+                        }
+                    }
+                    """;
+
+            MvcResult result = mockMvc.perform(post("/api/rulesets/execute")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(executePayload))
+                    .andExpect(status().isOk())
+                    .andReturn();
+
+            String responseBody = result.getResponse().getContentAsString();
+            TypeReference<Map<String, Object>> typeRef = new TypeReference<Map<String, Object>>() {
+            };
+            Map<String, Object> response = objectMapper.readValue(responseBody, typeRef);
+            @SuppressWarnings("unchecked")
+            Map<String, Object> outputVariables = (Map<String, Object>) response.get("outputVariables");
+
+            assertThat(outputVariables.get("first_user_name_upper")).isEqualTo("ALICE");
+        }
+
+        @Test
+        @DisplayName("Deep nested array index access through REST API")
+        void testDeepNestedArrayIndexAccess() throws Exception {
+            // Create ruleset with deep nested array access
+            String rulesetPayload = """
+                    {
+                        "name": "array_deep_test",
+                        "rules": [
+                            {
+                                "rule": "company.employees[1].profile.active == true THEN STRING_CONCAT(company.employees[1].profile.firstName, \\\" \\\", company.employees[1].profile.lastName)",
+                                "outputVariable": "second_employee_name"
+                            }
+                        ]
+                    }
+                    """;
+
+            mockMvc.perform(post("/api/rulesets")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(rulesetPayload))
+                    .andExpect(status().isCreated());
+
+            // Execute with deeply nested array input
+            String executePayload = """
+                    {
+                        "rulesetName": "array_deep_test",
+                        "inputData": {
+                            "company": {
+                                "employees": [
+                                    {
+                                        "profile": {
+                                            "firstName": "Alice",
+                                            "lastName": "Smith",
+                                            "active": false
+                                        }
+                                    },
+                                    {
+                                        "profile": {
+                                            "firstName": "Bob",
+                                            "lastName": "Johnson",
+                                            "active": true
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                    """;
+
+            MvcResult result = mockMvc.perform(post("/api/rulesets/execute")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(executePayload))
+                    .andExpect(status().isOk())
+                    .andReturn();
+
+            String responseBody = result.getResponse().getContentAsString();
+            TypeReference<Map<String, Object>> typeRef = new TypeReference<Map<String, Object>>() {
+            };
+            Map<String, Object> response = objectMapper.readValue(responseBody, typeRef);
+            @SuppressWarnings("unchecked")
+            Map<String, Object> outputVariables = (Map<String, Object>) response.get("outputVariables");
+
+            assertThat(outputVariables.get("second_employee_name")).isEqualTo("Bob Johnson");
+        }
+
+        @Test
+        @DisplayName("Multiple array index accesses through REST API")
+        void testMultipleArrayIndexAccesses() throws Exception {
+            // Create ruleset with multiple array accesses
+            String rulesetPayload = """
+                    {
+                        "name": "array_multiple_test",
+                        "rules": [
+                            {
+                                "rule": "orders[0].amount >= 100 AND orders[1].status == \\\"pending\\\" THEN STRING_CONCAT(\\\"Order \\\", orders[0].id.toString(), \\\" and Order \\\", orders[1].id.toString())",
+                                "outputVariable": "order_comparison"
+                            }
+                        ]
+                    }
+                    """;
+
+            mockMvc.perform(post("/api/rulesets")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(rulesetPayload))
+                    .andExpect(status().isCreated());
+
+            // Execute with multiple orders
+            String executePayload = """
+                    {
+                        "rulesetName": "array_multiple_test",
+                        "inputData": {
+                            "orders": [
+                                {
+                                    "id": 123,
+                                    "amount": 150.50,
+                                    "status": "completed"
+                                },
+                                {
+                                    "id": 124,
+                                    "amount": 75.25,
+                                    "status": "pending"
+                                }
+                            ]
+                        }
+                    }
+                    """;
+
+            MvcResult result = mockMvc.perform(post("/api/rulesets/execute")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(executePayload))
+                    .andExpect(status().isOk())
+                    .andReturn();
+
+            String responseBody = result.getResponse().getContentAsString();
+            TypeReference<Map<String, Object>> typeRef = new TypeReference<Map<String, Object>>() {
+            };
+            Map<String, Object> response = objectMapper.readValue(responseBody, typeRef);
+            @SuppressWarnings("unchecked")
+            Map<String, Object> outputVariables = (Map<String, Object>) response.get("outputVariables");
+
+            assertThat(outputVariables.get("order_comparison")).isEqualTo("Order 123 and Order 124");
+        }
+
+        @Test
+        @DisplayName("Array index with mixed flat and nested properties through REST API")
+        void testArrayIndexWithMixedProperties() throws Exception {
+            // Create ruleset mixing array index and regular nested access
+            String rulesetPayload = """
+                    {
+                        "name": "array_mixed_test",
+                        "rules": [
+                            {
+                                "rule": "customerName != null AND orders[0].status == \\\"shipped\\\" THEN STRING_CONCAT(customerName, \\\" - Order \\\", orders[0].trackingNumber)",
+                                "outputVariable": "shipping_info"
+                            }
+                        ]
+                    }
+                    """;
+
+            mockMvc.perform(post("/api/rulesets")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(rulesetPayload))
+                    .andExpect(status().isCreated());
+
+            // Execute with mixed data structure
+            String executePayload = """
+                    {
+                        "rulesetName": "array_mixed_test",
+                        "inputData": {
+                            "customerName": "John Doe",
+                            "orders": [
+                                {
+                                    "status": "shipped",
+                                    "trackingNumber": "TRK123456"
+                                }
+                            ]
+                        }
+                    }
+                    """;
+
+            MvcResult result = mockMvc.perform(post("/api/rulesets/execute")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(executePayload))
+                    .andExpect(status().isOk())
+                    .andReturn();
+
+            String responseBody = result.getResponse().getContentAsString();
+            TypeReference<Map<String, Object>> typeRef = new TypeReference<Map<String, Object>>() {
+            };
+            Map<String, Object> response = objectMapper.readValue(responseBody, typeRef);
+            @SuppressWarnings("unchecked")
+            Map<String, Object> outputVariables = (Map<String, Object>) response.get("outputVariables");
+
+            assertThat(outputVariables.get("shipping_info")).isEqualTo("John Doe - Order TRK123456");
+        }
+
+        @Test
+        @DisplayName("Array index with bounds checking through REST API")
+        void testArrayIndexBoundsChecking() throws Exception {
+            // Create ruleset with safe bounds checking
+            String rulesetPayload = """
+                    {
+                        "name": "array_bounds_test",
+                        "rules": [
+                            {
+                                "rule": "users.size() > 1 AND users[1].age >= 18 THEN STRING_UPPERCASE(users[1].name)",
+                                "outputVariable": "second_user"
+                            }
+                        ]
+                    }
+                    """;
+
+            mockMvc.perform(post("/api/rulesets")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(rulesetPayload))
+                    .andExpect(status().isCreated());
+
+            // Execute with sufficient array size
+            String executePayload = """
+                    {
+                        "rulesetName": "array_bounds_test",
+                        "inputData": {
+                            "users": [
+                                {
+                                    "name": "alice",
+                                    "age": 25
+                                },
+                                {
+                                    "name": "bob",
+                                    "age": 30
+                                }
+                            ]
+                        }
+                    }
+                    """;
+
+            MvcResult result = mockMvc.perform(post("/api/rulesets/execute")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(executePayload))
+                    .andExpect(status().isOk())
+                    .andReturn();
+
+            String responseBody = result.getResponse().getContentAsString();
+            TypeReference<Map<String, Object>> typeRef = new TypeReference<Map<String, Object>>() {
+            };
+            Map<String, Object> response = objectMapper.readValue(responseBody, typeRef);
+            @SuppressWarnings("unchecked")
+            Map<String, Object> outputVariables = (Map<String, Object>) response.get("outputVariables");
+
+            assertThat(outputVariables.get("second_user")).isEqualTo("BOB");
+        }
+    }
+
     // Helper methods
     private void createRule(String rulesetName, String rule, String outputVariable) throws Exception {
         String rulePayload = String.format("""

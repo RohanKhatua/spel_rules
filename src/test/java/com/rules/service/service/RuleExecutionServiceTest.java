@@ -482,4 +482,323 @@ class RuleExecutionServiceTest {
             assertThat(result).containsEntry("description", "Alice is 25 years old");
         }
     }
+
+    @Nested
+    @DisplayName("Nested JSON Object Access Tests")
+    class NestedJsonObjectTests {
+
+        @Test
+        @DisplayName("Basic nested object access with dot notation")
+        void testBasicNestedObjectAccess() {
+            // Arrange
+            Rule rule = createRule("user.age >= 18", "STRING_UPPERCASE(user.name)", "user_name_upper");
+            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+
+            Map<String, Object> userData = Map.of(
+                    "name", "alice",
+                    "age", 25);
+            Map<String, Object> inputData = Map.of("user", userData);
+
+            // Act
+            Map<String, Object> result = ruleExecutionService.executeRuleset("test_ruleset", inputData);
+
+            // Assert
+            assertThat(result).containsEntry("user_name_upper", "ALICE");
+        }
+
+        @Test
+        @DisplayName("Deep nested object access")
+        void testDeepNestedObjectAccess() {
+            // Arrange
+            Rule rule = createRule("user.profile.age >= 21",
+                    "STRING_CONCAT(user.profile.firstName, \" \", user.profile.lastName)", "full_name");
+            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+
+            Map<String, Object> profile = Map.of(
+                    "firstName", "John",
+                    "lastName", "Doe",
+                    "age", 30);
+            Map<String, Object> user = Map.of("profile", profile);
+            Map<String, Object> inputData = Map.of("user", user);
+
+            // Act
+            Map<String, Object> result = ruleExecutionService.executeRuleset("test_ruleset", inputData);
+
+            // Assert
+            assertThat(result).containsEntry("full_name", "John Doe");
+        }
+
+        @Test
+        @DisplayName("Multiple nested objects in same rule")
+        void testMultipleNestedObjects() {
+            // Arrange
+            Rule rule = createRule("user.age >= 18 AND address.country == \"USA\"",
+                    "STRING_CONCAT(user.name, \" from \", address.city)", "user_location");
+            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+
+            Map<String, Object> user = Map.of("name", "Bob", "age", 25);
+            Map<String, Object> address = Map.of("city", "New York", "country", "USA");
+            Map<String, Object> inputData = Map.of("user", user, "address", address);
+
+            // Act
+            Map<String, Object> result = ruleExecutionService.executeRuleset("test_ruleset", inputData);
+
+            // Assert
+            assertThat(result).containsEntry("user_location", "Bob from New York");
+        }
+
+        @Test
+        @DisplayName("Nested object access with null safety")
+        void testNestedObjectNullSafety() {
+            // Arrange
+            Rule rule = createRule("user.profile.age >= 18", "STRING_UPPERCASE(user.profile.name)",
+                    "profile_name_upper");
+            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+
+            Map<String, Object> user = Map.of("name", "alice"); // No profile object
+            Map<String, Object> inputData = Map.of("user", user);
+
+            // Act
+            Map<String, Object> result = ruleExecutionService.executeRuleset("test_ruleset", inputData);
+
+            // Assert - should handle gracefully with null safety
+            assertThat(result).doesNotContainKey("profile_name_upper");
+        }
+
+        @Test
+        @DisplayName("Complex nested object with arrays and mixed data types")
+        void testComplexNestedStructure() {
+            // Arrange
+            Rule rule = createRule("company.employees.size() > 0 AND company.active == true",
+                    "STRING_CONCAT(company.name, \" has \", company.employees.size().toString(), \" employees\")",
+                    "company_info");
+            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+
+            Map<String, Object> company = Map.of(
+                    "name", "TechCorp",
+                    "active", true,
+                    "employees", Arrays.asList("Alice", "Bob", "Charlie"));
+            Map<String, Object> inputData = Map.of("company", company);
+
+            // Act
+            Map<String, Object> result = ruleExecutionService.executeRuleset("test_ruleset", inputData);
+
+            // Assert
+            assertThat(result).containsEntry("company_info", "TechCorp has 3 employees");
+        }
+
+        @Test
+        @DisplayName("Nested object access in output variables")
+        void testNestedObjectInOutputVariables() {
+            // Arrange
+            Rule rule1 = createRule("user.age >= 18", "user.profile", "user_profile");
+            Rule rule2 = createRule("user_profile != null", "STRING_UPPERCASE(user_profile.name)",
+                    "profile_name_upper");
+            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule1, rule2));
+
+            Map<String, Object> profile = Map.of("name", "alice", "title", "engineer");
+            Map<String, Object> user = Map.of("age", 25, "profile", profile);
+            Map<String, Object> inputData = Map.of("user", user);
+
+            // Act
+            Map<String, Object> result = ruleExecutionService.executeRuleset("test_ruleset", inputData);
+
+            // Assert
+            assertThat(result).containsEntry("user_profile", profile);
+            assertThat(result).containsEntry("profile_name_upper", "ALICE");
+        }
+
+        @Test
+        @DisplayName("Mixed flat and nested property access")
+        void testMixedFlatAndNestedAccess() {
+            // Arrange
+            Rule rule = createRule("age >= 18 AND user.profile.verified == true",
+                    "STRING_CONCAT(name, \" - \", user.profile.title)", "verified_user");
+            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+
+            Map<String, Object> profile = Map.of("title", "Senior Developer", "verified", true);
+            Map<String, Object> user = Map.of("profile", profile);
+            Map<String, Object> inputData = Map.of(
+                    "name", "Alice",
+                    "age", 30,
+                    "user", user);
+
+            // Act
+            Map<String, Object> result = ruleExecutionService.executeRuleset("test_ruleset", inputData);
+
+            // Assert
+            assertThat(result).containsEntry("verified_user", "Alice - Senior Developer");
+        }
+    }
+
+    @Nested
+    @DisplayName("Array Index Access Tests")
+    class ArrayIndexAccessTests {
+
+        @Test
+        @DisplayName("Basic array index access with dot notation")
+        void testBasicArrayIndexAccess() {
+            // Arrange
+            Rule rule = createRule("users[0].age >= 18", "STRING_UPPERCASE(users[0].name)", "first_user_name_upper");
+            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+
+            Map<String, Object> user1 = Map.of("name", "alice", "age", 25);
+            Map<String, Object> user2 = Map.of("name", "bob", "age", 30);
+            Map<String, Object> inputData = Map.of("users", Arrays.asList(user1, user2));
+
+            // Act
+            Map<String, Object> result = ruleExecutionService.executeRuleset("test_ruleset", inputData);
+
+            // Assert
+            assertThat(result).containsEntry("first_user_name_upper", "ALICE");
+        }
+
+        @Test
+        @DisplayName("Array index access with deep nesting")
+        void testArrayIndexWithDeepNesting() {
+            // Arrange
+            Rule rule = createRule("company.employees[1].profile.active == true",
+                    "STRING_CONCAT(company.employees[1].profile.firstName, \" \", company.employees[1].profile.lastName)",
+                    "second_employee_name");
+            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+
+            Map<String, Object> profile1 = Map.of("firstName", "Alice", "lastName", "Smith", "active", false);
+            Map<String, Object> profile2 = Map.of("firstName", "Bob", "lastName", "Johnson", "active", true);
+            Map<String, Object> employee1 = Map.of("profile", profile1);
+            Map<String, Object> employee2 = Map.of("profile", profile2);
+            Map<String, Object> company = Map.of("employees", Arrays.asList(employee1, employee2));
+            Map<String, Object> inputData = Map.of("company", company);
+
+            // Act
+            Map<String, Object> result = ruleExecutionService.executeRuleset("test_ruleset", inputData);
+
+            // Assert
+            assertThat(result).containsEntry("second_employee_name", "Bob Johnson");
+        }
+
+        @Test
+        @DisplayName("Array index access with mixed property types")
+        void testArrayIndexWithMixedTypes() {
+            // Arrange
+            Rule rule = createRule("orders[0].amount >= 100 AND orders[0].status == \"completed\"",
+                    "STRING_CONCAT(\"Order #\", orders[0].id.toString(), \" - $\", orders[0].amount.toString())",
+                    "order_summary");
+            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+
+            Map<String, Object> order1 = Map.of("id", 123, "amount", 150.50, "status", "completed");
+            Map<String, Object> order2 = Map.of("id", 124, "amount", 75.25, "status", "pending");
+            Map<String, Object> inputData = Map.of("orders", Arrays.asList(order1, order2));
+
+            // Act
+            Map<String, Object> result = ruleExecutionService.executeRuleset("test_ruleset", inputData);
+
+            // Assert
+            assertThat(result).containsEntry("order_summary", "Order #123 - $150.5");
+        }
+
+        @Test
+        @DisplayName("Array index access with null safety using size checks")
+        void testArrayIndexWithNullSafety() {
+            // Arrange
+            Rule rule = createRule("users.size() > 0 AND users[0].age >= 18", "STRING_UPPERCASE(users[0].name)",
+                    "first_user_name");
+            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+
+            // Test with empty array - condition should be false
+            Map<String, Object> inputData1 = Map.of("users", Arrays.asList());
+            Map<String, Object> result1 = ruleExecutionService.executeRuleset("test_ruleset", inputData1);
+            assertThat(result1).doesNotContainKey("first_user_name");
+
+            // Test with non-empty array - should work
+            Map<String, Object> user = Map.of("name", "alice", "age", 25);
+            Map<String, Object> inputData2 = Map.of("users", Arrays.asList(user));
+            Map<String, Object> result2 = ruleExecutionService.executeRuleset("test_ruleset", inputData2);
+            assertThat(result2).containsEntry("first_user_name", "ALICE");
+        }
+
+        @Test
+        @DisplayName("Multiple array index accesses in same rule")
+        void testMultipleArrayIndexAccesses() {
+            // Arrange
+            Rule rule = createRule("users[0].age >= 18 AND users[1].age >= 21",
+                    "STRING_CONCAT(users[0].name, \" and \", users[1].name, \" are both adults\")",
+                    "adult_users");
+            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+
+            Map<String, Object> user1 = Map.of("name", "Alice", "age", 20);
+            Map<String, Object> user2 = Map.of("name", "Bob", "age", 25);
+            Map<String, Object> user3 = Map.of("name", "Charlie", "age", 16);
+            Map<String, Object> inputData = Map.of("users", Arrays.asList(user1, user2, user3));
+
+            // Act
+            Map<String, Object> result = ruleExecutionService.executeRuleset("test_ruleset", inputData);
+
+            // Assert
+            assertThat(result).containsEntry("adult_users", "Alice and Bob are both adults");
+        }
+
+        @Test
+        @DisplayName("Array index access combined with regular nested access")
+        void testArrayIndexWithRegularNesting() {
+            // Arrange
+            Rule rule = createRule("company.employees[0].active == true AND company.name != null",
+                    "STRING_CONCAT(company.name, \" - Employee: \", company.employees[0].profile.fullName)",
+                    "company_employee_info");
+            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+
+            Map<String, Object> profile = Map.of("fullName", "Alice Johnson");
+            Map<String, Object> employee = Map.of("active", true, "profile", profile);
+            Map<String, Object> company = Map.of("name", "TechCorp", "employees", Arrays.asList(employee));
+            Map<String, Object> inputData = Map.of("company", company);
+
+            // Act
+            Map<String, Object> result = ruleExecutionService.executeRuleset("test_ruleset", inputData);
+
+            // Assert
+            assertThat(result).containsEntry("company_employee_info", "TechCorp - Employee: Alice Johnson");
+        }
+
+        @Test
+        @DisplayName("Array index access with different array positions")
+        void testDifferentArrayPositions() {
+            // Arrange
+            Rule rule = createRule("products[2].inStock == true",
+                    "STRING_CONCAT(\"Available: \", products[2].name, \" - $\", products[2].price.toString())",
+                    "third_product_info");
+            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+
+            Map<String, Object> product1 = Map.of("name", "Laptop", "price", 999.99, "inStock", false);
+            Map<String, Object> product2 = Map.of("name", "Mouse", "price", 29.99, "inStock", true);
+            Map<String, Object> product3 = Map.of("name", "Keyboard", "price", 89.99, "inStock", true);
+            Map<String, Object> inputData = Map.of("products", Arrays.asList(product1, product2, product3));
+
+            // Act
+            Map<String, Object> result = ruleExecutionService.executeRuleset("test_ruleset", inputData);
+
+            // Assert
+            assertThat(result).containsEntry("third_product_info", "Available: Keyboard - $89.99");
+        }
+
+        @Test
+        @DisplayName("Array index access with bounds checking")
+        void testArrayIndexWithBoundsChecking() {
+            // Arrange - use size() method to ensure safe array access
+            Rule rule = createRule("users.size() > 2 AND users[2].age >= 18",
+                    "STRING_CONCAT(\"Third user: \", users[2].name)", "third_user");
+            when(ruleRepository.findByRuleset("test_ruleset")).thenReturn(Arrays.asList(rule));
+
+            // Test with insufficient elements - condition should be false
+            Map<String, Object> user1 = Map.of("name", "alice", "age", 25);
+            Map<String, Object> inputData1 = Map.of("users", Arrays.asList(user1));
+            Map<String, Object> result1 = ruleExecutionService.executeRuleset("test_ruleset", inputData1);
+            assertThat(result1).doesNotContainKey("third_user");
+
+            // Test with sufficient elements - should work
+            Map<String, Object> user2 = Map.of("name", "bob", "age", 30);
+            Map<String, Object> user3 = Map.of("name", "charlie", "age", 35);
+            Map<String, Object> inputData2 = Map.of("users", Arrays.asList(user1, user2, user3));
+            Map<String, Object> result2 = ruleExecutionService.executeRuleset("test_ruleset", inputData2);
+            assertThat(result2).containsEntry("third_user", "Third user: charlie");
+        }
+    }
 }

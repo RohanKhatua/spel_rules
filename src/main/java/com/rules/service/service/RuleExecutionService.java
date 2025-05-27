@@ -39,6 +39,7 @@ public class RuleExecutionService {
      * SpEL
      * This allows access to both input data and output variables from previous
      * rules
+     * Enhanced to support nested object access with dot notation
      */
     public static class PropertyAccessWrapper {
         private final Map<String, Object> properties;
@@ -54,14 +55,111 @@ public class RuleExecutionService {
             outputVariables.put(name, value);
         }
 
-        // This method allows SpEL to access any property dynamically
+        // This method allows SpEL to access any property dynamically with support for
+        // nested paths
         public Object get(String propertyName) {
             // Check output variables first (from previous rules), then input properties
-            Object value = outputVariables.get(propertyName);
+            Object value = getNestedValue(outputVariables, propertyName);
             if (value != null) {
                 return value;
             }
-            return properties.get(propertyName);
+            return getNestedValue(properties, propertyName);
+        }
+
+        /**
+         * Get value from nested object structure using dot notation
+         * Enhanced to support array index access (e.g., "users[0].name",
+         * "company.employees[1].profile.title")
+         * 
+         * @param source The source map to search in
+         * @param path   The property path (e.g., "user.profile.name", "users[0].name")
+         * @return The value at the nested path, or null if not found
+         */
+        private Object getNestedValue(Map<String, Object> source, String path) {
+            if (path == null || path.isEmpty()) {
+                return null;
+            }
+
+            String[] parts = path.split("\\.");
+            Object current = source;
+
+            for (String part : parts) {
+                if (current == null) {
+                    return null;
+                }
+
+                // Check if this part contains array index notation like "users[0]"
+                if (part.contains("[") && part.contains("]")) {
+                    current = handleArrayAccess(current, part);
+                } else {
+                    // Regular property access
+                    if (current instanceof Map) {
+                        @SuppressWarnings("unchecked")
+                        Map<String, Object> currentMap = (Map<String, Object>) current;
+                        current = currentMap.get(part);
+                    } else {
+                        // If current is not a Map, we can't navigate further
+                        return null;
+                    }
+                }
+            }
+
+            return current;
+        }
+
+        /**
+         * Handle array index access like "users[0]" or "employees[1]"
+         * 
+         * @param current The current object (should be a Map)
+         * @param part    The part containing array access notation
+         * @return The object at the specified array index, or null if not found/invalid
+         */
+        private Object handleArrayAccess(Object current, String part) {
+            if (!(current instanceof Map)) {
+                return null;
+            }
+
+            try {
+                // Parse property name and index from "propertyName[index]"
+                int openBracket = part.indexOf('[');
+                int closeBracket = part.indexOf(']');
+
+                if (openBracket == -1 || closeBracket == -1 || openBracket >= closeBracket) {
+                    return null;
+                }
+
+                String propertyName = part.substring(0, openBracket);
+                String indexStr = part.substring(openBracket + 1, closeBracket);
+
+                int index = Integer.parseInt(indexStr);
+
+                @SuppressWarnings("unchecked")
+                Map<String, Object> currentMap = (Map<String, Object>) current;
+                Object arrayProperty = currentMap.get(propertyName);
+
+                if (arrayProperty == null) {
+                    return null;
+                }
+
+                // Handle different array/list types
+                if (arrayProperty instanceof java.util.List) {
+                    @SuppressWarnings("unchecked")
+                    java.util.List<Object> list = (java.util.List<Object>) arrayProperty;
+                    if (index >= 0 && index < list.size()) {
+                        return list.get(index);
+                    }
+                } else if (arrayProperty.getClass().isArray()) {
+                    Object[] array = (Object[]) arrayProperty;
+                    if (index >= 0 && index < array.length) {
+                        return array[index];
+                    }
+                }
+
+                return null;
+            } catch (NumberFormatException | StringIndexOutOfBoundsException e) {
+                // Invalid index format or parsing error
+                return null;
+            }
         }
 
         // Common property accessors for direct access
@@ -190,6 +288,44 @@ public class RuleExecutionService {
         }
     }
 
+    /**
+     * Custom PropertyAccessor to handle nested Map access directly
+     * This allows SpEL to navigate nested Map structures using dot notation
+     */
+    public static class NestedMapPropertyAccessor implements PropertyAccessor {
+        @Override
+        public Class<?>[] getSpecificTargetClasses() {
+            return new Class<?>[] { Map.class };
+        }
+
+        @Override
+        public boolean canRead(EvaluationContext context, Object target, String name) throws AccessException {
+            return target instanceof Map;
+        }
+
+        @Override
+        public TypedValue read(EvaluationContext context, Object target, String name) throws AccessException {
+            if (target instanceof Map) {
+                @SuppressWarnings("unchecked")
+                Map<String, Object> map = (Map<String, Object>) target;
+                Object value = map.get(name);
+                return new TypedValue(value);
+            }
+            throw new AccessException("Cannot read property '" + name + "' from " + target.getClass());
+        }
+
+        @Override
+        public boolean canWrite(EvaluationContext context, Object target, String name) throws AccessException {
+            return false; // We don't support writing
+        }
+
+        @Override
+        public void write(EvaluationContext context, Object target, String name, Object newValue)
+                throws AccessException {
+            throw new AccessException("Writing not supported");
+        }
+    }
+
     @Transactional(readOnly = true)
     public Map<String, Object> executeRuleset(String rulesetName, Map<String, Object> inputData) {
         return executeRuleset(rulesetName, inputData, true);
@@ -209,8 +345,9 @@ public class RuleExecutionService {
         PropertyAccessWrapper rootObject = new PropertyAccessWrapper(inputData);
         StandardEvaluationContext context = new StandardEvaluationContext(rootObject);
 
-        // Register custom property accessor for dynamic property access
+        // Register custom property accessors for dynamic property access
         context.addPropertyAccessor(new PropertyAccessWrapperAccessor());
+        context.addPropertyAccessor(new NestedMapPropertyAccessor());
 
         try {
             // Register string functions

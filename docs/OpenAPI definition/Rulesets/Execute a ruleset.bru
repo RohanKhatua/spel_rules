@@ -12,10 +12,14 @@ post {
 
 body:json {
   {
-    "rulesetName": "ruleset1",
+    "rulesetName": "employee_validation",
     "inputData": {
-      "name": "rohan",
-      "age" : 21
+      "employees": [[
+        {
+          "age": 20,
+          "name": "rohan"
+        }
+      }]
     }
   }
 }
