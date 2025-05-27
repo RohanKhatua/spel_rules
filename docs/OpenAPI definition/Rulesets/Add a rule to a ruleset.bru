@@ -1,0 +1,22 @@
+meta {
+  name: Add a rule to a ruleset
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/api/rulesets/:name/rules
+  body: json
+  auth: none
+}
+
+params:path {
+  name: 
+}
+
+body:json {
+  {
+    "rule": "",
+    "outputVariable": ""
+  }
+}

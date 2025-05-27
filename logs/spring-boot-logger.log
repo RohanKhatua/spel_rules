@@ -1,0 +1,627 @@
+2025-05-27 06:41:18,241 INFO o.h.v.i.u.Version [background-preinit] HV000001: Hibernate Validator 8.0.1.Final
+2025-05-27 06:41:18,262 INFO o.s.b.StartupInfoLogger [main] Starting RulesServiceApplication using Java 17.0.12 with PID 79960 (/Users/rohankhatua/Developer/spel_rules/bin/main started by rohankhatua in /Users/rohankhatua/Developer/spel_rules)
+2025-05-27 06:41:18,263 DEBUG o.s.b.StartupInfoLogger [main] Running with Spring Boot v3.2.3, Spring v6.1.4
+2025-05-27 06:41:18,263 INFO o.s.b.SpringApplication [main] No active profile set, falling back to 1 default profile: "default"
+2025-05-27 06:41:18,551 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-05-27 06:41:18,572 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Finished Spring Data repository scanning in 17 ms. Found 1 JPA repository interface.
+2025-05-27 06:41:18,764 INFO o.s.b.w.e.t.TomcatWebServer [main] Tomcat initialized with port 8080 (http)
+2025-05-27 06:41:18,768 INFO o.a.j.l.DirectJDKLog [main] Initializing ProtocolHandler ["http-nio-8080"]
+2025-05-27 06:41:18,769 INFO o.a.j.l.DirectJDKLog [main] Starting service [Tomcat]
+2025-05-27 06:41:18,769 INFO o.a.j.l.DirectJDKLog [main] Starting Servlet engine: [Apache Tomcat/10.1.19]
+2025-05-27 06:41:18,831 INFO o.a.j.l.DirectJDKLog [main] Initializing Spring embedded WebApplicationContext
+2025-05-27 06:41:18,832 INFO o.s.b.w.s.c.ServletWebServerApplicationContext [main] Root WebApplicationContext: initialization completed in 550 ms
+2025-05-27 06:41:18,848 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Starting...
+2025-05-27 06:41:18,940 INFO c.z.h.p.HikariPool [main] HikariPool-1 - Added connection conn0: url=jdbc:h2:file:./rulesdb user=SA
+2025-05-27 06:41:18,940 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Start completed.
+2025-05-27 06:41:18,944 INFO o.s.b.a.h.H2ConsoleAutoConfiguration [main] H2 console available at '/h2-console'. Database available at 'jdbc:h2:file:./rulesdb'
+2025-05-27 06:41:18,994 INFO o.h.j.i.u.LogHelper [main] HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-05-27 06:41:19,020 INFO o.h.Version [main] HHH000412: Hibernate ORM core version 6.4.4.Final
+2025-05-27 06:41:19,033 INFO o.h.c.i.RegionFactoryInitiator [main] HHH000026: Second-level cache disabled
+2025-05-27 06:41:19,137 INFO o.s.o.j.p.SpringPersistenceUnitInfo [main] No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-05-27 06:41:19,155 WARN o.h.e.j.d.i.DialectFactoryImpl [main] HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-05-27 06:41:19,424 INFO o.h.e.t.j.p.i.JtaPlatformInitiator [main] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-05-27 06:41:19,442 INFO o.s.o.j.AbstractEntityManagerFactoryBean [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-05-27 06:41:19,633 WARN o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration [main] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-05-27 06:41:19,845 INFO o.a.j.l.DirectJDKLog [main] Starting ProtocolHandler ["http-nio-8080"]
+2025-05-27 06:41:19,892 INFO o.s.b.w.e.t.TomcatWebServer [main] Tomcat started on port 8080 (http) with context path ''
+2025-05-27 06:41:19,896 INFO o.s.b.StartupInfoLogger [main] Started RulesServiceApplication in 1.886 seconds (process running for 2.135)
+2025-05-27 06:41:57,310 INFO o.a.j.l.DirectJDKLog [http-nio-8080-exec-2] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-05-27 06:41:57,311 INFO o.s.w.s.FrameworkServlet [http-nio-8080-exec-2] Initializing Servlet 'dispatcherServlet'
+2025-05-27 06:41:57,317 INFO o.s.w.s.FrameworkServlet [http-nio-8080-exec-2] Completed initialization in 6 ms
+2025-05-27 06:41:57,462 DEBUG o.h.e.j.s.SqlStatementLogger [http-nio-8080-exec-2] 
+    select
+        r1_0.id,
+        r1_0.condition,
+        r1_0.output_variable,
+        r1_0.ruleset,
+        r1_0.transformation 
+    from
+        rule r1_0
+2025-05-27 06:42:08,769 ERROR o.a.j.l.DirectJDKLog [http-nio-8080-exec-4] Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed: java.lang.IllegalArgumentException: Name for argument of type [java.lang.String] not specified, and parameter name information not available via reflection. Ensure that the compiler uses the '-parameters' flag.] with root cause
+java.lang.IllegalArgumentException: Name for argument of type [java.lang.String] not specified, and parameter name information not available via reflection. Ensure that the compiler uses the '-parameters' flag.
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.updateNamedValueInfo(AbstractNamedValueMethodArgumentResolver.java:185)
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.getNamedValueInfo(AbstractNamedValueMethodArgumentResolver.java:160)
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.resolveArgument(AbstractNamedValueMethodArgumentResolver.java:106)
+	at org.springframework.web.method.support.HandlerMethodArgumentResolverComposite.resolveArgument(HandlerMethodArgumentResolverComposite.java:122)
+	at org.springframework.web.method.support.InvocableHandlerMethod.getMethodArgumentValues(InvocableHandlerMethod.java:228)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:182)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:920)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:830)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:205)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:391)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1744)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+2025-05-27 06:42:48,742 DEBUG o.h.e.j.s.SqlStatementLogger [http-nio-8080-exec-5] 
+    select
+        r1_0.id,
+        r1_0.condition,
+        r1_0.output_variable,
+        r1_0.ruleset,
+        r1_0.transformation 
+    from
+        rule r1_0 
+    where
+        r1_0.ruleset=?
+2025-05-27 06:42:48,746 INFO c.r.s.s.RuleExecutionService [http-nio-8080-exec-5] Input data: {name=rohan, age=21}
+2025-05-27 06:42:48,747 INFO c.r.s.s.RuleExecutionService [http-nio-8080-exec-5] Test direct 'age' expression result: 21
+2025-05-27 06:42:48,747 INFO c.r.s.s.RuleExecutionService [http-nio-8080-exec-5] Test '#age' expression result: 21
+2025-05-27 06:42:48,747 INFO c.r.s.s.RuleExecutionService [http-nio-8080-exec-5] Executing rule 5c4ead14-148f-4fcd-b65f-2a23ca3b4ba6: condition='age >= 18', transformation='STRING_UPPERCASE(name)'
+2025-05-27 06:42:48,748 INFO c.r.s.s.RuleExecutionService [http-nio-8080-exec-5] Rule 5c4ead14-148f-4fcd-b65f-2a23ca3b4ba6 condition result: true
+2025-05-27 06:42:48,751 INFO c.r.s.s.RuleExecutionService [http-nio-8080-exec-5] Rule 5c4ead14-148f-4fcd-b65f-2a23ca3b4ba6 executed successfully. Output: upper_name = ROHAN
+2025-05-27 06:42:48,752 INFO c.r.s.s.RuleExecutionService [http-nio-8080-exec-5] Executing rule 9ac1b762-64fe-42c5-b652-ecc8379dbc5f: condition='#age >= 18', transformation='STRING_UPPERCASE(#name)'
+2025-05-27 06:42:48,752 INFO c.r.s.s.RuleExecutionService [http-nio-8080-exec-5] Rule 9ac1b762-64fe-42c5-b652-ecc8379dbc5f condition result: true
+2025-05-27 06:42:48,752 INFO c.r.s.s.RuleExecutionService [http-nio-8080-exec-5] Rule 9ac1b762-64fe-42c5-b652-ecc8379dbc5f executed successfully. Output: upper_name_fixed = ROHAN
+2025-05-27 06:42:48,752 INFO c.r.s.s.RuleExecutionService [http-nio-8080-exec-5] Executing rule 67ae44ee-25c7-4624-9cee-19fe308c3408: condition='#age >= 18', transformation='#STRING_UPPERCASE(#name)'
+2025-05-27 06:42:48,752 INFO c.r.s.s.RuleExecutionService [http-nio-8080-exec-5] Rule 67ae44ee-25c7-4624-9cee-19fe308c3408 condition result: true
+2025-05-27 06:42:48,752 INFO c.r.s.s.RuleExecutionService [http-nio-8080-exec-5] Rule 67ae44ee-25c7-4624-9cee-19fe308c3408 executed successfully. Output: upper_name_correct = ROHAN
+2025-05-27 06:42:48,752 INFO c.r.s.s.RuleExecutionService [http-nio-8080-exec-5] Executing rule 45d8ca6c-38ce-4375-bfe6-3aed2eb6495c: condition='#age >= 18', transformation='"ADULT"'
+2025-05-27 06:42:48,753 INFO c.r.s.s.RuleExecutionService [http-nio-8080-exec-5] Rule 45d8ca6c-38ce-4375-bfe6-3aed2eb6495c condition result: true
+2025-05-27 06:42:48,753 INFO c.r.s.s.RuleExecutionService [http-nio-8080-exec-5] Rule 45d8ca6c-38ce-4375-bfe6-3aed2eb6495c executed successfully. Output: status = ADULT
+2025-05-27 06:42:48,754 DEBUG o.h.e.j.s.SqlStatementLogger [http-nio-8080-exec-5] 
+    select
+        r1_0.id,
+        r1_0.condition,
+        r1_0.output_variable,
+        r1_0.ruleset,
+        r1_0.transformation 
+    from
+        rule r1_0 
+    where
+        r1_0.ruleset=?
+2025-05-27 06:43:45,874 ERROR o.a.j.l.DirectJDKLog [http-nio-8080-exec-7] Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed: java.lang.IllegalArgumentException: Name for argument of type [java.lang.String] not specified, and parameter name information not available via reflection. Ensure that the compiler uses the '-parameters' flag.] with root cause
+java.lang.IllegalArgumentException: Name for argument of type [java.lang.String] not specified, and parameter name information not available via reflection. Ensure that the compiler uses the '-parameters' flag.
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.updateNamedValueInfo(AbstractNamedValueMethodArgumentResolver.java:185)
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.getNamedValueInfo(AbstractNamedValueMethodArgumentResolver.java:160)
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.resolveArgument(AbstractNamedValueMethodArgumentResolver.java:106)
+	at org.springframework.web.method.support.HandlerMethodArgumentResolverComposite.resolveArgument(HandlerMethodArgumentResolverComposite.java:122)
+	at org.springframework.web.method.support.InvocableHandlerMethod.getMethodArgumentValues(InvocableHandlerMethod.java:228)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:182)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:920)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:830)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:205)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:391)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1744)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+2025-05-27 06:46:24,155 INFO o.s.o.j.AbstractEntityManagerFactoryBean [SpringApplicationShutdownHook] Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-05-27 06:46:24,163 INFO c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown initiated...
+2025-05-27 06:46:24,166 INFO c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown completed.
+2025-05-27 06:46:33,895 INFO o.h.v.i.u.Version [background-preinit] HV000001: Hibernate Validator 8.0.1.Final
+2025-05-27 06:46:33,909 INFO o.s.b.StartupInfoLogger [main] Starting RulesServiceApplication using Java 21.0.7 with PID 82585 (/Users/rohankhatua/Developer/spel_rules/build/classes/java/main started by rohankhatua in /Users/rohankhatua/Developer/spel_rules)
+2025-05-27 06:46:33,909 DEBUG o.s.b.StartupInfoLogger [main] Running with Spring Boot v3.2.3, Spring v6.1.4
+2025-05-27 06:46:33,909 INFO o.s.b.SpringApplication [main] No active profile set, falling back to 1 default profile: "default"
+2025-05-27 06:46:34,162 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-05-27 06:46:34,177 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Finished Spring Data repository scanning in 11 ms. Found 1 JPA repository interface.
+2025-05-27 06:46:34,336 INFO o.s.b.w.e.t.TomcatWebServer [main] Tomcat initialized with port 8080 (http)
+2025-05-27 06:46:34,339 INFO o.a.j.l.DirectJDKLog [main] Initializing ProtocolHandler ["http-nio-8080"]
+2025-05-27 06:46:34,340 INFO o.a.j.l.DirectJDKLog [main] Starting service [Tomcat]
+2025-05-27 06:46:34,340 INFO o.a.j.l.DirectJDKLog [main] Starting Servlet engine: [Apache Tomcat/10.1.19]
+2025-05-27 06:46:34,362 INFO o.a.j.l.DirectJDKLog [main] Initializing Spring embedded WebApplicationContext
+2025-05-27 06:46:34,363 INFO o.s.b.w.s.c.ServletWebServerApplicationContext [main] Root WebApplicationContext: initialization completed in 437 ms
+2025-05-27 06:46:34,373 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Starting...
+2025-05-27 06:46:34,446 INFO c.z.h.p.HikariPool [main] HikariPool-1 - Added connection conn0: url=jdbc:h2:file:./rulesdb user=SA
+2025-05-27 06:46:34,446 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Start completed.
+2025-05-27 06:46:34,450 INFO o.s.b.a.h.H2ConsoleAutoConfiguration [main] H2 console available at '/h2-console'. Database available at 'jdbc:h2:file:./rulesdb'
+2025-05-27 06:46:34,490 INFO o.h.j.i.u.LogHelper [main] HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-05-27 06:46:34,513 INFO o.h.Version [main] HHH000412: Hibernate ORM core version 6.4.4.Final
+2025-05-27 06:46:34,524 INFO o.h.c.i.RegionFactoryInitiator [main] HHH000026: Second-level cache disabled
+2025-05-27 06:46:34,602 INFO o.s.o.j.p.SpringPersistenceUnitInfo [main] No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-05-27 06:46:34,618 WARN o.h.e.j.d.i.DialectFactoryImpl [main] HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-05-27 06:46:34,886 INFO o.h.e.t.j.p.i.JtaPlatformInitiator [main] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-05-27 06:46:34,901 INFO o.s.o.j.AbstractEntityManagerFactoryBean [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-05-27 06:46:35,048 WARN o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration [main] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-05-27 06:46:35,168 INFO o.a.j.l.DirectJDKLog [main] Starting ProtocolHandler ["http-nio-8080"]
+2025-05-27 06:46:35,176 INFO o.s.b.w.e.t.TomcatWebServer [main] Tomcat started on port 8080 (http) with context path ''
+2025-05-27 06:46:35,180 INFO o.s.b.StartupInfoLogger [main] Started RulesServiceApplication in 1.446 seconds (process running for 1.573)
+2025-05-27 06:46:44,157 INFO o.a.j.l.DirectJDKLog [http-nio-8080-exec-1] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-05-27 06:46:44,157 INFO o.s.w.s.FrameworkServlet [http-nio-8080-exec-1] Initializing Servlet 'dispatcherServlet'
+2025-05-27 06:46:44,161 INFO o.s.w.s.FrameworkServlet [http-nio-8080-exec-1] Completed initialization in 4 ms
+2025-05-27 06:46:44,236 DEBUG o.h.e.j.s.SqlStatementLogger [http-nio-8080-exec-1] 
+    select
+        r1_0.id,
+        r1_0.condition,
+        r1_0.output_variable,
+        r1_0.ruleset,
+        r1_0.transformation 
+    from
+        rule r1_0 
+    where
+        r1_0.ruleset=?
+2025-05-27 06:51:16,730 INFO o.s.o.j.AbstractEntityManagerFactoryBean [SpringApplicationShutdownHook] Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-05-27 06:51:16,738 INFO c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown initiated...
+2025-05-27 06:51:16,739 INFO c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown completed.
+2025-05-27 06:52:45,393 INFO o.h.v.i.u.Version [background-preinit] HV000001: Hibernate Validator 8.0.1.Final
+2025-05-27 06:52:45,406 INFO o.s.b.StartupInfoLogger [Test worker] Starting RuleExecutionServiceIntegrationTest using Java 21.0.7 with PID 83998 (started by rohankhatua in /Users/rohankhatua/Developer/spel_rules)
+2025-05-27 06:52:45,409 DEBUG o.s.b.StartupInfoLogger [Test worker] Running with Spring Boot v3.2.3, Spring v6.1.4
+2025-05-27 06:52:45,409 INFO o.s.b.SpringApplication [Test worker] The following 1 profile is active: "test"
+2025-05-27 06:52:45,671 INFO o.s.d.r.c.RepositoryConfigurationDelegate [Test worker] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-05-27 06:52:45,688 INFO o.s.d.r.c.RepositoryConfigurationDelegate [Test worker] Finished Spring Data repository scanning in 14 ms. Found 1 JPA repository interface.
+2025-05-27 06:52:45,837 INFO o.h.j.i.u.LogHelper [Test worker] HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-05-27 06:52:45,860 INFO o.h.Version [Test worker] HHH000412: Hibernate ORM core version 6.4.4.Final
+2025-05-27 06:52:45,911 INFO o.h.c.i.RegionFactoryInitiator [Test worker] HHH000026: Second-level cache disabled
+2025-05-27 06:52:45,996 INFO o.s.o.j.p.SpringPersistenceUnitInfo [Test worker] No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-05-27 06:52:46,008 INFO c.z.h.HikariDataSource [Test worker] HikariPool-1 - Starting...
+2025-05-27 06:52:46,073 INFO c.z.h.p.HikariPool [Test worker] HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2025-05-27 06:52:46,074 INFO c.z.h.HikariDataSource [Test worker] HikariPool-1 - Start completed.
+2025-05-27 06:52:46,085 WARN o.h.e.j.d.i.DialectFactoryImpl [Test worker] HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-05-27 06:52:46,373 INFO o.h.e.t.j.p.i.JtaPlatformInitiator [Test worker] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-05-27 06:52:46,384 INFO o.s.o.j.AbstractEntityManagerFactoryBean [Test worker] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-05-27 06:52:46,587 WARN o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration [Test worker] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-05-27 06:52:46,755 INFO o.s.b.StartupInfoLogger [Test worker] Started RuleExecutionServiceIntegrationTest in 1.492 seconds (process running for 1.933)
+2025-05-27 06:52:46,763 INFO o.s.o.j.AbstractEntityManagerFactoryBean [Test worker] Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-05-27 06:52:46,765 INFO c.z.h.HikariDataSource [Test worker] HikariPool-1 - Shutdown initiated...
+2025-05-27 06:52:46,766 INFO c.z.h.HikariDataSource [Test worker] HikariPool-1 - Shutdown completed.
+2025-05-27 06:52:46,780 INFO o.s.b.StartupInfoLogger [Test worker] Starting RuleExecutionServiceIntegrationTest.NestedTransformations using Java 21.0.7 with PID 83998 (started by rohankhatua in /Users/rohankhatua/Developer/spel_rules)
+2025-05-27 06:52:46,781 DEBUG o.s.b.StartupInfoLogger [Test worker] Running with Spring Boot v3.2.3, Spring v6.1.4
+2025-05-27 06:52:46,781 INFO o.s.b.SpringApplication [Test worker] The following 1 profile is active: "test"
+2025-05-27 06:52:46,847 INFO o.s.d.r.c.RepositoryConfigurationDelegate [Test worker] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-05-27 06:52:46,851 INFO o.s.d.r.c.RepositoryConfigurationDelegate [Test worker] Finished Spring Data repository scanning in 2 ms. Found 1 JPA repository interface.
+2025-05-27 06:52:46,878 INFO o.h.j.i.u.LogHelper [Test worker] HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-05-27 06:52:46,879 INFO o.h.c.i.RegionFactoryInitiator [Test worker] HHH000026: Second-level cache disabled
+2025-05-27 06:52:46,881 INFO o.s.o.j.p.SpringPersistenceUnitInfo [Test worker] No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-05-27 06:52:46,881 INFO c.z.h.HikariDataSource [Test worker] HikariPool-2 - Starting...
+2025-05-27 06:52:46,882 INFO c.z.h.p.HikariPool [Test worker] HikariPool-2 - Added connection conn10: url=jdbc:h2:mem:testdb user=SA
+2025-05-27 06:52:46,882 INFO c.z.h.HikariDataSource [Test worker] HikariPool-2 - Start completed.
+2025-05-27 06:52:46,882 WARN o.h.e.j.d.i.DialectFactoryImpl [Test worker] HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-05-27 06:52:46,896 INFO o.h.e.t.j.p.i.JtaPlatformInitiator [Test worker] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-05-27 06:52:46,897 INFO o.s.o.j.AbstractEntityManagerFactoryBean [Test worker] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-05-27 06:52:46,936 WARN o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration [Test worker] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-05-27 06:52:46,983 INFO o.s.b.StartupInfoLogger [Test worker] Started RuleExecutionServiceIntegrationTest.NestedTransformations in 0.216 seconds (process running for 2.161)
+2025-05-27 06:52:47,247 INFO o.s.m.w.MockServletContext [Test worker] Initializing Spring TestDispatcherServlet ''
+2025-05-27 06:52:47,247 INFO o.s.w.s.FrameworkServlet [Test worker] Initializing Servlet ''
+2025-05-27 06:52:47,247 ERROR o.s.w.s.FrameworkServlet [Test worker] Context initialization failed
+java.lang.IllegalStateException: Cannot set parent bean factory to self
+	at org.springframework.beans.factory.support.AbstractBeanFactory.setParentBeanFactory(AbstractBeanFactory.java:782)
+	at org.springframework.context.support.GenericApplicationContext.setParent(GenericApplicationContext.java:169)
+	at org.springframework.web.servlet.FrameworkServlet.initWebApplicationContext(FrameworkServlet.java:581)
+	at org.springframework.web.servlet.FrameworkServlet.initServletBean(FrameworkServlet.java:537)
+	at org.springframework.web.servlet.HttpServletBean.init(HttpServletBean.java:169)
+	at jakarta.servlet.GenericServlet.init(GenericServlet.java:143)
+	at jakarta.servlet.http.HttpServlet.init(HttpServlet.java:121)
+	at org.springframework.test.web.servlet.MockMvcBuilderSupport.createMockMvc(MockMvcBuilderSupport.java:78)
+	at org.springframework.test.web.servlet.MockMvcBuilderSupport.createMockMvc(MockMvcBuilderSupport.java:58)
+	at org.springframework.test.web.servlet.setup.AbstractMockMvcBuilder.build(AbstractMockMvcBuilder.java:199)
+	at com.rules.service.RuleExecutionServiceIntegrationTest.setUp(RuleExecutionServiceIntegrationTest.java:47)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:728)
+	at org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:60)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:131)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:156)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptLifecycleMethod(TimeoutExtension.java:128)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptBeforeEachMethod(TimeoutExtension.java:78)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:103)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:93)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:64)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:45)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:37)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:92)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:86)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.invokeMethodInExtensionContext(ClassBasedTestDescriptor.java:521)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$synthesizeBeforeEachMethodAdapter$23(ClassBasedTestDescriptor.java:506)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeBeforeEachMethods$3(TestMethodTestDescriptor.java:175)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeBeforeMethodsOrCallbacksUntilExceptionOccurs$6(TestMethodTestDescriptor.java:203)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeBeforeMethodsOrCallbacksUntilExceptionOccurs(TestMethodTestDescriptor.java:203)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeBeforeEachMethods(TestMethodTestDescriptor.java:172)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:135)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:69)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:151)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:107)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:88)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:54)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:67)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:52)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:114)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:86)
+	at org.junit.platform.launcher.core.DefaultLauncherSession$DelegatingLauncher.execute(DefaultLauncherSession.java:86)
+	at org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor$CollectAllTestClassesExecutor.processAllTestClasses(JUnitPlatformTestClassProcessor.java:124)
+	at org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor$CollectAllTestClassesExecutor.access$000(JUnitPlatformTestClassProcessor.java:99)
+	at org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor.stop(JUnitPlatformTestClassProcessor.java:94)
+	at org.gradle.api.internal.tasks.testing.SuiteTestClassProcessor.stop(SuiteTestClassProcessor.java:63)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:36)
+	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:24)
+	at org.gradle.internal.dispatch.ContextClassLoaderDispatch.dispatch(ContextClassLoaderDispatch.java:33)
+	at org.gradle.internal.dispatch.ProxyDispatchAdapter$DispatchingInvocationHandler.invoke(ProxyDispatchAdapter.java:92)
+	at jdk.proxy1/jdk.proxy1.$Proxy4.stop(Unknown Source)
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker$3.run(TestWorker.java:200)
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker.executeAndMaintainThreadName(TestWorker.java:132)
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker.execute(TestWorker.java:103)
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker.execute(TestWorker.java:63)
+	at org.gradle.process.internal.worker.child.ActionExecutionWorker.execute(ActionExecutionWorker.java:56)
+	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:121)
+	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:71)
+	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
+	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
+2025-05-27 06:52:47,353 INFO c.r.s.s.RuleExecutionService [Test worker] Input data: {age=35, name=WATSON}
+2025-05-27 06:52:47,353 INFO c.r.s.s.RuleExecutionService [Test worker] Test direct 'age' expression result: 35
+2025-05-27 06:52:47,354 INFO c.r.s.s.RuleExecutionService [Test worker] Test '#age' expression result: 35
+2025-05-27 06:52:47,354 INFO c.r.s.s.RuleExecutionService [Test worker] Executing rule null: condition='age >= 21', transformation='STRING_UPPERCASE(STRING_CONCAT("DR. ", STRING_LOWERCASE(name)))'
+2025-05-27 06:52:47,354 DEBUG c.r.s.s.RuleExecutionService [Test worker] Available output variables from previous rules: []
+2025-05-27 06:52:47,354 INFO c.r.s.s.RuleExecutionService [Test worker] Rule null condition result: true
+2025-05-27 06:52:47,357 INFO c.r.s.s.RuleExecutionService [Test worker] Rule null executed successfully. Output: doctor_title = DR. WATSON
+2025-05-27 06:52:47,389 INFO o.s.o.j.AbstractEntityManagerFactoryBean [SpringApplicationShutdownHook] Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-05-27 06:52:47,390 INFO c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-2 - Shutdown initiated...
+2025-05-27 06:52:47,390 INFO c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-2 - Shutdown completed.
+2025-05-27 06:53:58,833 INFO o.h.v.i.u.Version [background-preinit] HV000001: Hibernate Validator 8.0.1.Final
+2025-05-27 06:53:58,844 INFO o.s.b.StartupInfoLogger [Test worker] Starting RuleExecutionServiceIntegrationTest using Java 21.0.7 with PID 84219 (started by rohankhatua in /Users/rohankhatua/Developer/spel_rules)
+2025-05-27 06:53:58,847 DEBUG o.s.b.StartupInfoLogger [Test worker] Running with Spring Boot v3.2.3, Spring v6.1.4
+2025-05-27 06:53:58,847 INFO o.s.b.SpringApplication [Test worker] The following 1 profile is active: "test"
+2025-05-27 06:53:59,089 INFO o.s.d.r.c.RepositoryConfigurationDelegate [Test worker] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-05-27 06:53:59,106 INFO o.s.d.r.c.RepositoryConfigurationDelegate [Test worker] Finished Spring Data repository scanning in 15 ms. Found 1 JPA repository interface.
+2025-05-27 06:53:59,243 INFO o.h.j.i.u.LogHelper [Test worker] HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-05-27 06:53:59,263 INFO o.h.Version [Test worker] HHH000412: Hibernate ORM core version 6.4.4.Final
+2025-05-27 06:53:59,275 INFO o.h.c.i.RegionFactoryInitiator [Test worker] HHH000026: Second-level cache disabled
+2025-05-27 06:53:59,348 INFO o.s.o.j.p.SpringPersistenceUnitInfo [Test worker] No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-05-27 06:53:59,357 INFO c.z.h.HikariDataSource [Test worker] HikariPool-1 - Starting...
+2025-05-27 06:53:59,424 INFO c.z.h.p.HikariPool [Test worker] HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2025-05-27 06:53:59,424 INFO c.z.h.HikariDataSource [Test worker] HikariPool-1 - Start completed.
+2025-05-27 06:53:59,435 WARN o.h.e.j.d.i.DialectFactoryImpl [Test worker] HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-05-27 06:53:59,719 INFO o.h.e.t.j.p.i.JtaPlatformInitiator [Test worker] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-05-27 06:53:59,730 INFO o.s.o.j.AbstractEntityManagerFactoryBean [Test worker] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-05-27 06:53:59,927 WARN o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration [Test worker] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-05-27 06:54:00,092 INFO o.s.b.StartupInfoLogger [Test worker] Started RuleExecutionServiceIntegrationTest in 1.377 seconds (process running for 1.816)
+2025-05-27 06:54:00,100 INFO o.s.o.j.AbstractEntityManagerFactoryBean [Test worker] Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-05-27 06:54:00,102 INFO c.z.h.HikariDataSource [Test worker] HikariPool-1 - Shutdown initiated...
+2025-05-27 06:54:00,103 INFO c.z.h.HikariDataSource [Test worker] HikariPool-1 - Shutdown completed.
+2025-05-27 06:54:00,116 INFO o.s.b.StartupInfoLogger [Test worker] Starting RuleExecutionServiceIntegrationTest.AdvancedDataTypes using Java 21.0.7 with PID 84219 (started by rohankhatua in /Users/rohankhatua/Developer/spel_rules)
+2025-05-27 06:54:00,117 DEBUG o.s.b.StartupInfoLogger [Test worker] Running with Spring Boot v3.2.3, Spring v6.1.4
+2025-05-27 06:54:00,117 INFO o.s.b.SpringApplication [Test worker] The following 1 profile is active: "test"
+2025-05-27 06:54:00,179 INFO o.s.d.r.c.RepositoryConfigurationDelegate [Test worker] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-05-27 06:54:00,182 INFO o.s.d.r.c.RepositoryConfigurationDelegate [Test worker] Finished Spring Data repository scanning in 2 ms. Found 1 JPA repository interface.
+2025-05-27 06:54:00,212 INFO o.h.j.i.u.LogHelper [Test worker] HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-05-27 06:54:00,213 INFO o.h.c.i.RegionFactoryInitiator [Test worker] HHH000026: Second-level cache disabled
+2025-05-27 06:54:00,214 INFO o.s.o.j.p.SpringPersistenceUnitInfo [Test worker] No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-05-27 06:54:00,215 INFO c.z.h.HikariDataSource [Test worker] HikariPool-2 - Starting...
+2025-05-27 06:54:00,216 INFO c.z.h.p.HikariPool [Test worker] HikariPool-2 - Added connection conn10: url=jdbc:h2:mem:testdb user=SA
+2025-05-27 06:54:00,216 INFO c.z.h.HikariDataSource [Test worker] HikariPool-2 - Start completed.
+2025-05-27 06:54:00,216 WARN o.h.e.j.d.i.DialectFactoryImpl [Test worker] HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-05-27 06:54:00,230 INFO o.h.e.t.j.p.i.JtaPlatformInitiator [Test worker] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-05-27 06:54:00,231 INFO o.s.o.j.AbstractEntityManagerFactoryBean [Test worker] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-05-27 06:54:00,269 WARN o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration [Test worker] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-05-27 06:54:00,313 INFO o.s.b.StartupInfoLogger [Test worker] Started RuleExecutionServiceIntegrationTest.AdvancedDataTypes in 0.209 seconds (process running for 2.038)
+2025-05-27 06:54:00,585 INFO o.s.m.w.MockServletContext [Test worker] Initializing Spring TestDispatcherServlet ''
+2025-05-27 06:54:00,585 INFO o.s.w.s.FrameworkServlet [Test worker] Initializing Servlet ''
+2025-05-27 06:54:00,585 ERROR o.s.w.s.FrameworkServlet [Test worker] Context initialization failed
+java.lang.IllegalStateException: Cannot set parent bean factory to self
+	at org.springframework.beans.factory.support.AbstractBeanFactory.setParentBeanFactory(AbstractBeanFactory.java:782)
+	at org.springframework.context.support.GenericApplicationContext.setParent(GenericApplicationContext.java:169)
+	at org.springframework.web.servlet.FrameworkServlet.initWebApplicationContext(FrameworkServlet.java:581)
+	at org.springframework.web.servlet.FrameworkServlet.initServletBean(FrameworkServlet.java:537)
+	at org.springframework.web.servlet.HttpServletBean.init(HttpServletBean.java:169)
+	at jakarta.servlet.GenericServlet.init(GenericServlet.java:143)
+	at jakarta.servlet.http.HttpServlet.init(HttpServlet.java:121)
+	at org.springframework.test.web.servlet.MockMvcBuilderSupport.createMockMvc(MockMvcBuilderSupport.java:78)
+	at org.springframework.test.web.servlet.MockMvcBuilderSupport.createMockMvc(MockMvcBuilderSupport.java:58)
+	at org.springframework.test.web.servlet.setup.AbstractMockMvcBuilder.build(AbstractMockMvcBuilder.java:199)
+	at com.rules.service.RuleExecutionServiceIntegrationTest.setUp(RuleExecutionServiceIntegrationTest.java:47)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:728)
+	at org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:60)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:131)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:156)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptLifecycleMethod(TimeoutExtension.java:128)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptBeforeEachMethod(TimeoutExtension.java:78)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:103)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:93)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:64)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:45)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:37)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:92)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:86)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.invokeMethodInExtensionContext(ClassBasedTestDescriptor.java:521)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$synthesizeBeforeEachMethodAdapter$23(ClassBasedTestDescriptor.java:506)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeBeforeEachMethods$3(TestMethodTestDescriptor.java:175)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeBeforeMethodsOrCallbacksUntilExceptionOccurs$6(TestMethodTestDescriptor.java:203)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeBeforeMethodsOrCallbacksUntilExceptionOccurs(TestMethodTestDescriptor.java:203)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeBeforeEachMethods(TestMethodTestDescriptor.java:172)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:135)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:69)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:151)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:107)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:88)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:54)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:67)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:52)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:114)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:86)
+	at org.junit.platform.launcher.core.DefaultLauncherSession$DelegatingLauncher.execute(DefaultLauncherSession.java:86)
+	at org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor$CollectAllTestClassesExecutor.processAllTestClasses(JUnitPlatformTestClassProcessor.java:124)
+	at org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor$CollectAllTestClassesExecutor.access$000(JUnitPlatformTestClassProcessor.java:99)
+	at org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor.stop(JUnitPlatformTestClassProcessor.java:94)
+	at org.gradle.api.internal.tasks.testing.SuiteTestClassProcessor.stop(SuiteTestClassProcessor.java:63)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:36)
+	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:24)
+	at org.gradle.internal.dispatch.ContextClassLoaderDispatch.dispatch(ContextClassLoaderDispatch.java:33)
+	at org.gradle.internal.dispatch.ProxyDispatchAdapter$DispatchingInvocationHandler.invoke(ProxyDispatchAdapter.java:92)
+	at jdk.proxy1/jdk.proxy1.$Proxy4.stop(Unknown Source)
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker$3.run(TestWorker.java:200)
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker.executeAndMaintainThreadName(TestWorker.java:132)
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker.execute(TestWorker.java:103)
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker.execute(TestWorker.java:63)
+	at org.gradle.process.internal.worker.child.ActionExecutionWorker.execute(ActionExecutionWorker.java:56)
+	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:121)
+	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:71)
+	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
+	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
+2025-05-27 06:54:00,693 INFO c.r.s.s.RuleExecutionService [Test worker] Input data: {age=25, name=Alice}
+2025-05-27 06:54:00,693 INFO c.r.s.s.RuleExecutionService [Test worker] Test direct 'age' expression result: 25
+2025-05-27 06:54:00,694 INFO c.r.s.s.RuleExecutionService [Test worker] Test '#age' expression result: 25
+2025-05-27 06:54:00,694 INFO c.r.s.s.RuleExecutionService [Test worker] Executing rule null: condition='age >= 18', transformation='STRING_CONCAT(name, " is ", age.toString(), " years old")'
+2025-05-27 06:54:00,694 DEBUG c.r.s.s.RuleExecutionService [Test worker] Available output variables from previous rules: []
+2025-05-27 06:54:00,695 INFO c.r.s.s.RuleExecutionService [Test worker] Rule null condition result: true
+2025-05-27 06:54:00,697 INFO c.r.s.s.RuleExecutionService [Test worker] Rule null executed successfully. Output: description = Alice is 25 years old
+2025-05-27 06:54:00,724 INFO o.s.o.j.AbstractEntityManagerFactoryBean [SpringApplicationShutdownHook] Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-05-27 06:54:00,725 INFO c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-2 - Shutdown initiated...
+2025-05-27 06:54:00,726 INFO c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-2 - Shutdown completed.
+2025-05-27 06:57:57,694 INFO o.h.v.i.u.Version [background-preinit] HV000001: Hibernate Validator 8.0.1.Final
+2025-05-27 06:57:57,709 INFO o.s.b.StartupInfoLogger [main] Starting RulesServiceApplication using Java 21.0.7 with PID 84638 (/Users/rohankhatua/Developer/spel_rules/build/classes/java/main started by rohankhatua in /Users/rohankhatua/Developer/spel_rules)
+2025-05-27 06:57:57,709 DEBUG o.s.b.StartupInfoLogger [main] Running with Spring Boot v3.2.3, Spring v6.1.4
+2025-05-27 06:57:57,709 INFO o.s.b.SpringApplication [main] No active profile set, falling back to 1 default profile: "default"
+2025-05-27 06:57:57,929 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-05-27 06:57:57,943 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Finished Spring Data repository scanning in 11 ms. Found 1 JPA repository interface.
+2025-05-27 06:57:58,088 INFO o.s.b.w.e.t.TomcatWebServer [main] Tomcat initialized with port 8080 (http)
+2025-05-27 06:57:58,092 INFO o.a.j.l.DirectJDKLog [main] Initializing ProtocolHandler ["http-nio-8080"]
+2025-05-27 06:57:58,093 INFO o.a.j.l.DirectJDKLog [main] Starting service [Tomcat]
+2025-05-27 06:57:58,093 INFO o.a.j.l.DirectJDKLog [main] Starting Servlet engine: [Apache Tomcat/10.1.19]
+2025-05-27 06:57:58,115 INFO o.a.j.l.DirectJDKLog [main] Initializing Spring embedded WebApplicationContext
+2025-05-27 06:57:58,115 INFO o.s.b.w.s.c.ServletWebServerApplicationContext [main] Root WebApplicationContext: initialization completed in 392 ms
+2025-05-27 06:57:58,125 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Starting...
+2025-05-27 06:57:58,193 INFO c.z.h.p.HikariPool [main] HikariPool-1 - Added connection conn0: url=jdbc:h2:file:./rulesdb user=SA
+2025-05-27 06:57:58,194 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Start completed.
+2025-05-27 06:57:58,197 INFO o.s.b.a.h.H2ConsoleAutoConfiguration [main] H2 console available at '/h2-console'. Database available at 'jdbc:h2:file:./rulesdb'
+2025-05-27 06:57:58,235 INFO o.h.j.i.u.LogHelper [main] HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-05-27 06:57:58,254 INFO o.h.Version [main] HHH000412: Hibernate ORM core version 6.4.4.Final
+2025-05-27 06:57:58,263 INFO o.h.c.i.RegionFactoryInitiator [main] HHH000026: Second-level cache disabled
+2025-05-27 06:57:58,330 INFO o.s.o.j.p.SpringPersistenceUnitInfo [main] No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-05-27 06:57:58,344 WARN o.h.e.j.d.i.DialectFactoryImpl [main] HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-05-27 06:57:58,592 INFO o.h.e.t.j.p.i.JtaPlatformInitiator [main] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-05-27 06:57:58,607 INFO o.s.o.j.AbstractEntityManagerFactoryBean [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-05-27 06:57:58,748 WARN o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration [main] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-05-27 06:57:58,884 INFO o.a.j.l.DirectJDKLog [main] Starting ProtocolHandler ["http-nio-8080"]
+2025-05-27 06:57:58,892 INFO o.s.b.w.e.t.TomcatWebServer [main] Tomcat started on port 8080 (http) with context path ''
+2025-05-27 06:57:58,896 INFO o.s.b.StartupInfoLogger [main] Started RulesServiceApplication in 1.375 seconds (process running for 1.558)
+2025-05-27 06:58:04,209 INFO o.a.j.l.DirectJDKLog [http-nio-8080-exec-1] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-05-27 06:58:04,209 INFO o.s.w.s.FrameworkServlet [http-nio-8080-exec-1] Initializing Servlet 'dispatcherServlet'
+2025-05-27 06:58:04,210 INFO o.s.w.s.FrameworkServlet [http-nio-8080-exec-1] Completed initialization in 1 ms
+2025-05-27 06:58:04,271 DEBUG o.h.e.j.s.SqlStatementLogger [http-nio-8080-exec-1] 
+    insert 
+    into
+        rule
+        (condition, output_variable, ruleset, transformation, id) 
+    values
+        (?, ?, ?, ?, ?)
+2025-05-27 06:58:50,560 DEBUG o.h.e.j.s.SqlStatementLogger [http-nio-8080-exec-3] 
+    insert 
+    into
+        rule
+        (condition, output_variable, ruleset, transformation, id) 
+    values
+        (?, ?, ?, ?, ?)
+2025-05-27 06:59:26,324 DEBUG o.h.e.j.s.SqlStatementLogger [http-nio-8080-exec-5] 
+    select
+        r1_0.id,
+        r1_0.condition,
+        r1_0.output_variable,
+        r1_0.ruleset,
+        r1_0.transformation 
+    from
+        rule r1_0 
+    where
+        r1_0.ruleset=?
+2025-05-27 07:00:25,533 DEBUG o.h.e.j.s.SqlStatementLogger [http-nio-8080-exec-7] 
+    select
+        r1_0.id,
+        r1_0.condition,
+        r1_0.output_variable,
+        r1_0.ruleset,
+        r1_0.transformation 
+    from
+        rule r1_0 
+    where
+        r1_0.ruleset=?
+2025-05-27 07:00:25,537 INFO c.r.s.s.RuleExecutionService [http-nio-8080-exec-7] Input data: {abc=25, some_val=heLLoo}
+2025-05-27 07:00:25,539 INFO c.r.s.s.RuleExecutionService [http-nio-8080-exec-7] Test direct 'age' expression result: null
+2025-05-27 07:00:25,539 INFO c.r.s.s.RuleExecutionService [http-nio-8080-exec-7] Test '#age' expression result: null
+2025-05-27 07:00:25,539 INFO c.r.s.s.RuleExecutionService [http-nio-8080-exec-7] Executing rule 1b612cb9-392f-4cdd-b0fc-ef7c6eb106c0: condition='abc >= 18', transformation='STRING_UPPERCASE(some_val)'
+2025-05-27 07:00:25,539 DEBUG c.r.s.s.RuleExecutionService [http-nio-8080-exec-7] Available output variables from previous rules: []
+2025-05-27 07:00:25,541 INFO c.r.s.s.RuleExecutionService [http-nio-8080-exec-7] Rule 1b612cb9-392f-4cdd-b0fc-ef7c6eb106c0 condition result: true
+2025-05-27 07:00:25,544 INFO c.r.s.s.RuleExecutionService [http-nio-8080-exec-7] Rule 1b612cb9-392f-4cdd-b0fc-ef7c6eb106c0 executed successfully. Output: new_val = HELLOO
+2025-05-27 07:00:25,544 INFO c.r.s.s.RuleExecutionService [http-nio-8080-exec-7] Executing rule 33bc46a8-f829-4b13-85ce-fd59a39d17ad: condition='abc < 30', transformation='STRING_LOWERCASE(new_val)'
+2025-05-27 07:00:25,544 DEBUG c.r.s.s.RuleExecutionService [http-nio-8080-exec-7] Available output variables from previous rules: [new_val]
+2025-05-27 07:00:25,545 INFO c.r.s.s.RuleExecutionService [http-nio-8080-exec-7] Rule 33bc46a8-f829-4b13-85ce-fd59a39d17ad condition result: true
+2025-05-27 07:00:25,545 INFO c.r.s.s.RuleExecutionService [http-nio-8080-exec-7] Rule 33bc46a8-f829-4b13-85ce-fd59a39d17ad executed successfully. Output: lowered = helloo
+2025-05-27 07:00:25,546 DEBUG o.h.e.j.s.SqlStatementLogger [http-nio-8080-exec-7] 
+    select
+        r1_0.id,
+        r1_0.condition,
+        r1_0.output_variable,
+        r1_0.ruleset,
+        r1_0.transformation 
+    from
+        rule r1_0 
+    where
+        r1_0.ruleset=?

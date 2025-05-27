@@ -1,0 +1,15 @@
+meta {
+  name: Get a ruleset by name
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/api/rulesets/:name
+  body: none
+  auth: none
+}
+
+params:path {
+  name: ruleset1
+}

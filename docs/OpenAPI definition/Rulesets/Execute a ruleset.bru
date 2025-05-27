@@ -1,0 +1,21 @@
+meta {
+  name: Execute a ruleset
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/api/rulesets/execute
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "rulesetName": "ruleset1",
+    "inputData": {
+      "name": "rohan",
+      "age" : 21
+    }
+  }
+}
