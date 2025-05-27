@@ -4,17 +4,24 @@ import java.util.Arrays;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.ArgumentMatchers.any;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.expression.spel.support.StandardEvaluationContext;
 
 import com.rules.service.model.Rule;
 import com.rules.service.repository.RuleRepository;
+import com.rules.service.service.NestedMapPropertyAccessor;
+import com.rules.service.service.PropertyAccessWrapper;
+import com.rules.service.service.PropertyAccessWrapperAccessor;
 import com.rules.service.service.RuleExecutionService;
+import com.rules.service.service.SpelContextConfigurationService;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Manual Nested JSON Test")
@@ -23,8 +30,30 @@ public class ManualNestedJsonTest {
     @Mock
     private RuleRepository ruleRepository;
 
+    @Mock
+    private SpelContextConfigurationService spelContextConfigurationService;
+
     @InjectMocks
     private RuleExecutionService ruleExecutionService;
+
+    @BeforeEach
+    void setUp() {
+        // Mock the SpelContextConfigurationService to create a proper context with
+        // input data
+        when(spelContextConfigurationService.createEvaluationContext(any())).thenAnswer(invocation -> {
+            @SuppressWarnings("unchecked")
+            Map<String, Object> inputData = (Map<String, Object>) invocation.getArgument(0);
+            PropertyAccessWrapper wrapper = new PropertyAccessWrapper(inputData);
+            StandardEvaluationContext context = new StandardEvaluationContext(wrapper);
+            context.addPropertyAccessor(new PropertyAccessWrapperAccessor());
+            context.addPropertyAccessor(new NestedMapPropertyAccessor());
+
+            // Add input data as variables for backward compatibility
+            inputData.forEach(context::setVariable);
+
+            return context;
+        });
+    }
 
     private Rule createRule(String condition, String transformation, String outputVariable) {
         Rule rule = new Rule();

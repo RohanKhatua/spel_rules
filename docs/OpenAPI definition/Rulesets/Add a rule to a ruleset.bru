@@ -11,12 +11,12 @@ post {
 }
 
 params:path {
-  name: 
+  name: checkoutput
 }
 
 body:json {
   {
-    "rule": "",
-    "outputVariable": ""
+    "rule": "abc < 30 THEN STRING_LOWERCASE(new_val)",
+    "outputVariable": "lowered"
   }
 }

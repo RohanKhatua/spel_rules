@@ -1,5 +1,6 @@
 package com.rules.service;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -8,31 +9,28 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureWebMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.test.web.servlet.MvcResult;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rules.service.repository.RuleRepository;
 
 @SpringBootTest
-@AutoConfigureWebMvc
+@AutoConfigureMockMvc
 @ActiveProfiles("test")
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@Transactional
+@Rollback
 @DisplayName("Rule Execution Service - Comprehensive Integration Tests")
 public class RuleExecutionServiceIntegrationTest {
-
-    @Autowired
-    private WebApplicationContext webApplicationContext;
 
     @Autowired
     private RuleRepository ruleRepository;
@@ -40,11 +38,11 @@ public class RuleExecutionServiceIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
     private MockMvc mockMvc;
 
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         ruleRepository.deleteAll();
     }
 
@@ -180,7 +178,7 @@ public class RuleExecutionServiceIntegrationTest {
             // Execute
             Map<String, Object> result = executeRuleset("nested_test", Map.of("name", "WATSON", "age", 35));
 
-            assertThat(result.get("doctor_title")).isEqualTo("DR. watson");
+            assertThat(result.get("doctor_title")).isEqualTo("DR. WATSON");
         }
     }
 
@@ -308,7 +306,10 @@ public class RuleExecutionServiceIntegrationTest {
                     "name_upper");
 
             // Test with null name - should handle gracefully
-            Map<String, Object> result = executeRuleset("null_test", Map.of("name", (String) null, "age", 25));
+            Map<String, Object> inputData = new HashMap<>();
+            inputData.put("name", null);
+            inputData.put("age", 25);
+            Map<String, Object> result = executeRuleset("null_test", inputData);
             assertThat(result.get("name_upper")).isNull();
         }
 

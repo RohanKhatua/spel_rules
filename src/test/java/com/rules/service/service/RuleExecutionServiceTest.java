@@ -6,14 +6,18 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.ArgumentMatchers.any;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.expression.spel.support.StandardEvaluationContext;
 
 import com.rules.service.model.Rule;
 import com.rules.service.repository.RuleRepository;
@@ -25,8 +29,45 @@ class RuleExecutionServiceTest {
     @Mock
     private RuleRepository ruleRepository;
 
+    @Mock
+    private SpelContextConfigurationService spelContextConfigurationService;
+
     @InjectMocks
     private RuleExecutionService ruleExecutionService;
+
+    @BeforeEach
+    void setUp() {
+        // Mock the SpelContextConfigurationService to create a proper context with
+        // input data
+        lenient().when(spelContextConfigurationService.createEvaluationContext(any())).thenAnswer(invocation -> {
+            @SuppressWarnings("unchecked")
+            Map<String, Object> inputData = (Map<String, Object>) invocation.getArgument(0);
+            PropertyAccessWrapper wrapper = new PropertyAccessWrapper(inputData);
+            StandardEvaluationContext context = new StandardEvaluationContext(wrapper);
+            context.addPropertyAccessor(new PropertyAccessWrapperAccessor());
+            context.addPropertyAccessor(new NestedMapPropertyAccessor());
+
+            // Add input data as variables for backward compatibility
+            inputData.forEach(context::setVariable);
+
+            return context;
+        });
+
+        // Mock the addOutputVariable method to actually add variables to the context
+        lenient().doAnswer(invocation -> {
+            StandardEvaluationContext context = invocation.getArgument(0);
+            PropertyAccessWrapper wrapper = invocation.getArgument(1);
+            String variableName = invocation.getArgument(2);
+            Object value = invocation.getArgument(3);
+
+            // Add to context for # syntax access
+            context.setVariable(variableName, value);
+            // Add to root object for direct property access
+            wrapper.addOutputVariable(variableName, value);
+
+            return null;
+        }).when(spelContextConfigurationService).addOutputVariable(any(), any(), any(), any());
+    }
 
     private Rule createRule(String condition, String transformation, String outputVariable) {
         Rule rule = new Rule();

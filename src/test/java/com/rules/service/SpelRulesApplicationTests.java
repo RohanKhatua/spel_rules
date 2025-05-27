@@ -1,4 +1,4 @@
-package com.example.spel_rules;
+package com.rules.service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

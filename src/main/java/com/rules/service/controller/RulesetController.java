@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -59,7 +60,7 @@ public class RulesetController {
                 })
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok(ruleRepository.saveAll(rules));
+        return ResponseEntity.status(HttpStatus.CREATED).body(ruleRepository.saveAll(rules));
     }
 
     @Operation(summary = "Add a rule to a ruleset", description = "Adds a single rule to an existing ruleset or creates a new ruleset if it doesn't exist. The rule should be in the format 'condition THEN transformation'.", responses = {
